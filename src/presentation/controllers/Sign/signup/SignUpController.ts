@@ -8,7 +8,7 @@ export class SignUpController {
       'name',
       'email',
       'nick',
-      'influencer',
+      'isInfluencer',
       'password',
       'passwordConfirmation',
     ];
