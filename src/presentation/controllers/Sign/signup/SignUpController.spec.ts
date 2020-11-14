@@ -8,14 +8,13 @@ describe('SignUpController', () => {
       body: {
         email: 'any_email@mail.com',
         nick: 'any_nick',
-        isInfluencer: false,
+        isInfluencer: true,
         password: 'any_password',
         passwordConfirmation: 'any_password',
       },
     };
     const httpResponse = sut.handle(httpRequest);
     expect(httpResponse.statusCode).toBe(400);
-
     expect(httpResponse.body).toEqual(new MissingParamError('name'));
   });
 
@@ -25,7 +24,7 @@ describe('SignUpController', () => {
       body: {
         name: 'any_name',
         nick: 'any_nick',
-        isInfluencer: false,
+        isInfluencer: true,
         password: 'any_password',
         passwordConfirmation: 'any_password',
       },
@@ -35,13 +34,13 @@ describe('SignUpController', () => {
     expect(httpResponse.body).toEqual(new MissingParamError('email'));
   });
 
-  it('should  return 400 if no nick is provided', () => {
+  it('should  return 400 if no n ick is provided', () => {
     const sut = new SignUpController();
     const httpRequest = {
       body: {
         name: 'any_name',
         email: 'any_email@mail.com',
-        isInfluencer: false,
+        isInfluencer: true,
         password: 'any_password',
         passwordConfirmation: 'any_password',
       },
