@@ -14,6 +14,8 @@ describe('SignUpController', () => {
       },
     };
     const httpResponse = sut.handle(httpRequest);
+    expect(httpResponse.statusCode).toBe(400);
+
     expect(httpResponse.body).toEqual(new MissingParamError('name'));
   });
 
@@ -29,6 +31,7 @@ describe('SignUpController', () => {
       },
     };
     const httpResponse = sut.handle(httpRequest);
+    expect(httpResponse.statusCode).toBe(400);
     expect(httpResponse.body).toEqual(new MissingParamError('email'));
   });
 
@@ -44,6 +47,7 @@ describe('SignUpController', () => {
       },
     };
     const httpResponse = sut.handle(httpRequest);
+    expect(httpResponse.statusCode).toBe(400);
     expect(httpResponse.body).toEqual(new MissingParamError('nick'));
   });
 
@@ -59,6 +63,7 @@ describe('SignUpController', () => {
       },
     };
     const httpResponse = sut.handle(httpRequest);
+    expect(httpResponse.statusCode).toBe(400);
     expect(httpResponse.body).toEqual(new MissingParamError('isInfluencer'));
   });
 
@@ -74,6 +79,7 @@ describe('SignUpController', () => {
       },
     };
     const httpResponse = sut.handle(httpRequest);
+    expect(httpResponse.statusCode).toBe(400);
     expect(httpResponse.body).toEqual(new MissingParamError('password'));
   });
 
@@ -89,6 +95,7 @@ describe('SignUpController', () => {
       },
     };
     const httpResponse = sut.handle(httpRequest);
+    expect(httpResponse.statusCode).toBe(400);
     expect(httpResponse.body).toEqual(
       new MissingParamError('passwordConfirmation'),
     );
