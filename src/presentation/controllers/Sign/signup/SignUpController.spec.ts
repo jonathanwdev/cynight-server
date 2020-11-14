@@ -8,9 +8,7 @@ describe('SignUpController', () => {
       body: {
         email: 'any_email@mail.com',
         nick: 'any_nick',
-        influencer: false,
-        avatar: 'any_avatar',
-        inTheNight: 'any_inTheNight',
+        isInfluencer: false,
         password: 'any_password',
         passwordConfirmation: 'any_password',
       },
@@ -18,15 +16,14 @@ describe('SignUpController', () => {
     const httpResponse = sut.handle(httpRequest);
     expect(httpResponse.body).toEqual(new MissingParamError('name'));
   });
+
   it('should  return 400 if no email is provided', () => {
     const sut = new SignUpController();
     const httpRequest = {
       body: {
         name: 'any_name',
         nick: 'any_nick',
-        influencer: false,
-        avatar: 'any_avatar',
-        inTheNight: 'any_inTheNight',
+        isInfluencer: false,
         password: 'any_password',
         passwordConfirmation: 'any_password',
       },
@@ -34,36 +31,19 @@ describe('SignUpController', () => {
     const httpResponse = sut.handle(httpRequest);
     expect(httpResponse.body).toEqual(new MissingParamError('email'));
   });
+
   it('should  return 400 if no nick is provided', () => {
     const sut = new SignUpController();
     const httpRequest = {
       body: {
         name: 'any_name',
         email: 'any_email@mail.com',
-        influencer: false,
-        avatar: 'any_avatar',
-        inTheNight: 'any_inTheNight',
+        isInfluencer: false,
         password: 'any_password',
         passwordConfirmation: 'any_password',
       },
     };
     const httpResponse = sut.handle(httpRequest);
     expect(httpResponse.body).toEqual(new MissingParamError('nick'));
-  });
-  it('should  return 400 if no influencer is provided', () => {
-    const sut = new SignUpController();
-    const httpRequest = {
-      body: {
-        name: 'any_name',
-        nick: 'any_nick',
-        email: 'any_email@mail.com',
-        avatar: 'any_avatar',
-        inTheNight: 'any_inTheNight',
-        password: 'any_password',
-        passwordConfirmation: 'any_password',
-      },
-    };
-    const httpResponse = sut.handle(httpRequest);
-    expect(httpResponse.body).toEqual(new MissingParamError('influencer'));
   });
 });
