@@ -50,4 +50,20 @@ describe('SignUpController', () => {
     const httpResponse = sut.handle(httpRequest);
     expect(httpResponse.body).toEqual(new MissingParamError('nick'));
   });
+  it('should  return 400 if no influencer is provided', () => {
+    const sut = new SignUpController();
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        nick: 'any_nick',
+        email: 'any_email@mail.com',
+        avatar: 'any_avatar',
+        inTheNight: 'any_inTheNight',
+        password: 'any_password',
+        passwordConfirmation: 'any_password',
+      },
+    };
+    const httpResponse = sut.handle(httpRequest);
+    expect(httpResponse.body).toEqual(new MissingParamError('influencer'));
+  });
 });
