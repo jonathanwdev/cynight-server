@@ -164,7 +164,7 @@ describe('SignUpController', () => {
     expect(emailSpy).toHaveBeenCalledWith('any_email@mail.com');
   });
 
-  it('should  return 500 if EmailValidator throws', async () => {
+  it('should  return 500 if EmailValidator throws', () => {
     class EmailValidatorStub implements EmailValidator {
       isValid(email: string): boolean {
         throw new Error();
