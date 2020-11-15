@@ -1,9 +1,20 @@
 import { MissingParamError } from '@/presentation/errors/MissinParamError';
 import { SignUpController } from './SignUpController';
 
+type SutTypes = {
+  sut: SignUpController;
+};
+
+const makeSut = (): SutTypes => {
+  const sut = new SignUpController();
+  return {
+    sut,
+  };
+};
+
 describe('SignUpController', () => {
   it('should  return 400 if no name is provided', () => {
-    const sut = new SignUpController();
+    const { sut } = makeSut();
     const httpRequest = {
       body: {
         email: 'any_email@mail.com',
@@ -19,7 +30,7 @@ describe('SignUpController', () => {
   });
 
   it('should  return 400 if no email is provided', () => {
-    const sut = new SignUpController();
+    const { sut } = makeSut();
     const httpRequest = {
       body: {
         name: 'any_name',
@@ -35,7 +46,7 @@ describe('SignUpController', () => {
   });
 
   it('should  return 400 if no n ick is provided', () => {
-    const sut = new SignUpController();
+    const { sut } = makeSut();
     const httpRequest = {
       body: {
         name: 'any_name',
@@ -51,7 +62,7 @@ describe('SignUpController', () => {
   });
 
   it('should  return 400 if no  isInfluencer provided', () => {
-    const sut = new SignUpController();
+    const { sut } = makeSut();
     const httpRequest = {
       body: {
         name: 'any_name',
@@ -67,7 +78,7 @@ describe('SignUpController', () => {
   });
 
   it('should  return 400 if no  password provided', () => {
-    const sut = new SignUpController();
+    const { sut } = makeSut();
     const httpRequest = {
       body: {
         name: 'any_name',
@@ -83,7 +94,7 @@ describe('SignUpController', () => {
   });
 
   it('should  return 400 if no  passwordConfirmation provided', () => {
-    const sut = new SignUpController();
+    const { sut } = makeSut();
     const httpRequest = {
       body: {
         name: 'any_name',
