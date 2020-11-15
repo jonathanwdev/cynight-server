@@ -1,14 +1,23 @@
-import { MissingParamError } from '@/presentation/errors/MissinParamError';
+import { MissingParamError, InvalidParamError } from '@/presentation/errors';
+import { EmailValidator } from '@/validation/protocols/emailValidator';
 import { SignUpController } from './SignUpController';
 
 type SutTypes = {
   sut: SignUpController;
+  emailValidatorStub: EmailValidator;
 };
 
 const makeSut = (): SutTypes => {
-  const sut = new SignUpController();
+  class EmailValidatorStub implements EmailValidator {
+    isValid(email: string): boolean {
+      return true;
+    }
+  }
+  const emailValidatorStub = new EmailValidatorStub();
+  const sut = new SignUpController(emailValidatorStub);
   return {
     sut,
+    emailValidatorStub,
   };
 };
 
@@ -109,5 +118,23 @@ describe('SignUpController', () => {
     expect(httpResponse.body).toEqual(
       new MissingParamError('passwordConfirmation'),
     );
+  });
+
+  it('should  return 400 if an invalid email os provided', () => {
+    const { sut, emailValidatorStub } = makeSut();
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'invalid_email@mail.com',
+        nick: 'any_nick',
+        isInfluencer: true,
+        password: 'any_password',
+        passwordConfirmation: 'any_password',
+      },
+    };
+    jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false);
+    const httpResponse = sut.handle(httpRequest);
+    expect(httpResponse.statusCode).toBe(400);
+    expect(httpResponse.body).toEqual(new InvalidParamError('email'));
   });
 });
