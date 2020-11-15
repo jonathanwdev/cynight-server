@@ -7,6 +7,17 @@ type SutTypes = {
   emailValidatorStub: EmailValidator;
 };
 
+const makeFakeAccountRequest = () => ({
+  body: {
+    name: 'any_name',
+    email: 'invalid_email@mail.com',
+    nick: 'any_nick',
+    isInfluencer: true,
+    password: 'any_password',
+    passwordConfirmation: 'any_password',
+  },
+});
+
 const makeSut = (): SutTypes => {
   class EmailValidatorStub implements EmailValidator {
     isValid(email: string): boolean {
@@ -122,36 +133,16 @@ describe('SignUpController', () => {
 
   it('should  return 400 if an invalid email os provided', () => {
     const { sut, emailValidatorStub } = makeSut();
-    const httpRequest = {
-      body: {
-        name: 'any_name',
-        email: 'invalid_email@mail.com',
-        nick: 'any_nick',
-        isInfluencer: true,
-        password: 'any_password',
-        passwordConfirmation: 'any_password',
-      },
-    };
     jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false);
-    const httpResponse = sut.handle(httpRequest);
+    const httpResponse = sut.handle(makeFakeAccountRequest());
     expect(httpResponse.statusCode).toBe(400);
     expect(httpResponse.body).toEqual(new InvalidParamError('email'));
   });
 
   it('should  call  emailValidator with correct email', () => {
     const { sut, emailValidatorStub } = makeSut();
-    const httpRequest = {
-      body: {
-        name: 'any_name',
-        email: 'invalid_email@mail.com',
-        nick: 'any_nick',
-        isInfluencer: true,
-        password: 'any_password',
-        passwordConfirmation: 'any_password',
-      },
-    };
     const emailSpy = jest.spyOn(emailValidatorStub, 'isValid');
-    sut.handle(httpRequest);
+    sut.handle(makeFakeAccountRequest());
     expect(emailSpy).toHaveBeenCalledWith('invalid_email@mail.com');
   });
 });
