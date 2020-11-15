@@ -7,11 +7,6 @@ import {
 import { EmailValidator } from '@/validation/protocols/emailValidator';
 import { SignUpController } from './SignUpController';
 
-type SutTypes = {
-  sut: SignUpController;
-  emailValidatorStub: EmailValidator;
-};
-
 const makeFakeAccountRequest = () => ({
   body: {
     name: 'any_name',
@@ -30,6 +25,20 @@ const makeFakeEmailValidator = (): EmailValidator => {
     }
   }
   return new EmailValidatorStub();
+};
+
+const makeFakeEmailValidatorWithError = (): EmailValidator => {
+  class EmailValidatorStub implements EmailValidator {
+    isValid(email: string): boolean {
+      throw new Error();
+    }
+  }
+  return new EmailValidatorStub();
+};
+
+type SutTypes = {
+  sut: SignUpController;
+  emailValidatorStub: EmailValidator;
 };
 
 const makeSut = (): SutTypes => {
@@ -165,12 +174,7 @@ describe('SignUpController', () => {
   });
 
   it('should  return 500 if EmailValidator throws', () => {
-    class EmailValidatorStub implements EmailValidator {
-      isValid(email: string): boolean {
-        throw new Error();
-      }
-    }
-    const emailValidatorStub = new EmailValidatorStub();
+    const emailValidatorStub = makeFakeEmailValidatorWithError();
     const sut = new SignUpController(emailValidatorStub);
     const httpResponse = sut.handle(makeFakeAccountRequest());
     expect(httpResponse.statusCode).toBe(500);
