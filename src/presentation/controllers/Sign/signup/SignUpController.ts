@@ -5,10 +5,14 @@ import {
 } from '@/presentation/protocols';
 import { MissingParamError, InvalidParamError } from '@/presentation/errors';
 import { badRequest, serverError } from '@/presentation/helpers/httpHelper';
-import { EmailValidator } from '@/validation/protocols/emailValidator';
+import { IEmailValidator } from '@/validation/protocols/IEmailValidator';
+import { ICreateAccount } from '@/domain/usecases/ICreateAccount';
 
 export class SignUpController implements Controller {
-  constructor(private readonly emailValidator: EmailValidator) {}
+  constructor(
+    private readonly emailValidator: IEmailValidator,
+    private readonly createAccount: ICreateAccount,
+  ) {}
 
   public handle(httpRequest: HttpRequest): HttpResponse {
     try {
@@ -36,6 +40,9 @@ export class SignUpController implements Controller {
         return badRequest(new InvalidParamError('email'));
       }
 
+      delete httpRequest.body.passwordConfirmation;
+
+      this.createAccount.create(httpRequest.body);
       return null;
     } catch (error) {
       return serverError();
