@@ -228,4 +228,14 @@ describe('SignUpController', () => {
       password: 'any_password',
     });
   });
+
+  it('should  return 500 if createAccount throws', () => {
+    const { sut, createAccountStub } = makeSut();
+    jest.spyOn(createAccountStub, 'create').mockImplementationOnce(() => {
+      throw new Error();
+    });
+    const httpResponse = sut.handle(makeFakeAccountRequest());
+    expect(httpResponse.statusCode).toBe(500);
+    expect(httpResponse.body).toEqual(new ServerError());
+  });
 });
