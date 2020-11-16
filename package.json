@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js",
     "test": "jest --passWithNoTests --watch",
     "test:staged": "jest --passWithNoTests",
     "test:ci": "npm test -- --coverage"
@@ -11,7 +12,10 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "pg": "^8.5.1",
+    "typeorm": "^0.2.29"
+  },
   "devDependencies": {
     "@types/jest": "^26.0.15",
     "@types/node": "^14.14.7",
@@ -29,6 +33,7 @@
     "lint-staged": "^10.5.1",
     "prettier": "^2.1.2",
     "ts-jest": "^26.4.4",
+    "ts-node-dev": "^1.0.0",
     "typescript": "^4.0.5"
   }
 }
