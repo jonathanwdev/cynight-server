@@ -1,14 +1,14 @@
+import { User } from '@/domain/typeorm/entities/User';
 import {
   MissingParamError,
   InvalidParamError,
   ServerError,
 } from '@/presentation/errors';
-import { IEmailValidator } from '@/validation/protocols/IEmailValidator';
-import { User } from '@/domain/typeorm/entities/User';
 import {
-  ICreateAccount,
   ICreateAccountModel,
-} from '@/domain/usecases/ICreateAccount';
+  ICreateAccount,
+  IEmailValidator,
+} from './exportProtocols';
 import { SignUpController } from './SignUpController';
 
 const makeFakeAccountRequest = () => ({

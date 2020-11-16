@@ -1,12 +1,12 @@
+import { MissingParamError, InvalidParamError } from '@/presentation/errors';
+import { badRequest, serverError } from '@/presentation/helpers/httpHelper';
 import {
   HttpRequest,
   HttpResponse,
   Controller,
-} from '@/presentation/protocols';
-import { MissingParamError, InvalidParamError } from '@/presentation/errors';
-import { badRequest, serverError } from '@/presentation/helpers/httpHelper';
-import { IEmailValidator } from '@/validation/protocols/IEmailValidator';
-import { ICreateAccount } from '@/domain/usecases/ICreateAccount';
+  IEmailValidator,
+  ICreateAccount,
+} from './exportProtocols';
 
 export class SignUpController implements Controller {
   constructor(
