@@ -42,8 +42,11 @@ export class SignUpController implements Controller {
 
       delete httpRequest.body.passwordConfirmation;
 
-      this.createAccount.create(httpRequest.body);
-      return null;
+      const account = this.createAccount.create(httpRequest.body);
+      return {
+        statusCode: 200,
+        body: account,
+      };
     } catch (error) {
       return serverError();
     }
