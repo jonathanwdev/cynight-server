@@ -24,7 +24,7 @@ const makeFakeAccountRequest = () => ({
 
 const makeCreateAccount = (): ICreateAccount => {
   class CreateAccountStub implements ICreateAccount {
-    async create(account: ICreateAccountModel): Promise<User> {
+    create(account: ICreateAccountModel): User {
       return {
         id: 'any_id',
         email: 'any_email@mail.com',
@@ -237,5 +237,19 @@ describe('SignUpController', () => {
     const httpResponse = sut.handle(makeFakeAccountRequest());
     expect(httpResponse.statusCode).toBe(500);
     expect(httpResponse.body).toEqual(new ServerError());
+  });
+
+  it('should  return 200 valid data is provided', () => {
+    const { sut } = makeSut();
+    const httpResponse = sut.handle(makeFakeAccountRequest());
+    expect(httpResponse.statusCode).toBe(200);
+    expect(httpResponse.body).toEqual({
+      id: 'any_id',
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      nick: 'any_nick',
+      isInfluencer: true,
+      password: 'any_password',
+    });
   });
 });
