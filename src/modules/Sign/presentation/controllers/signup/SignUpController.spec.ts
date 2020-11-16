@@ -3,7 +3,7 @@ import {
   MissingParamError,
   InvalidParamError,
   ServerError,
-} from '@/shared/errors';
+} from '@/shared/presentation/errors';
 import {
   ICreateAccountModel,
   ICreateAccount,
