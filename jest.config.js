@@ -4,11 +4,17 @@ module.exports = {
   },
   collectCoverageFrom: [
     '<rootDir>/src/**/*.ts',
-    '!<rootDir>/src/main/**'
+    '!<rootDir>/src/modules/**/infra/database/**',
+    '!<rootDir>/src/shared/database/**',
+    '!**/exportProtocols.ts'
   ],
   coverageDirectory: 'coverage',
   roots: [
     '<rootDir>/src'
+  ],
+  testMatch: [
+    "**/*.spec.ts",
+    "**/*.test.ts",
   ],
   // preset: '@shelf/jest-mongodb',
   testEnvironment: 'node',
