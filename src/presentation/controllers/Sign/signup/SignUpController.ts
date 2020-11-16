@@ -18,7 +18,7 @@ export class SignUpController implements Controller {
     private readonly createAccount: ICreateAccount,
   ) {}
 
-  public handle(httpRequest: HttpRequest): HttpResponse {
+  public async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
       const { email, password, passwordConfirmation } = httpRequest.body;
       const requiredFields = [
@@ -46,7 +46,7 @@ export class SignUpController implements Controller {
 
       delete httpRequest.body.passwordConfirmation;
 
-      const account = this.createAccount.create(httpRequest.body);
+      const account = await this.createAccount.create(httpRequest.body);
       return okay(account);
     } catch (error) {
       return serverError();
