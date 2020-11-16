@@ -1,5 +1,9 @@
 import { MissingParamError, InvalidParamError } from '@/presentation/errors';
-import { badRequest, serverError } from '@/presentation/helpers/httpHelper';
+import {
+  badRequest,
+  serverError,
+  okay,
+} from '@/presentation/helpers/httpHelper';
 import {
   HttpRequest,
   HttpResponse,
@@ -43,10 +47,7 @@ export class SignUpController implements Controller {
       delete httpRequest.body.passwordConfirmation;
 
       const account = this.createAccount.create(httpRequest.body);
-      return {
-        statusCode: 200,
-        body: account,
-      };
+      return okay(account);
     } catch (error) {
       return serverError();
     }
