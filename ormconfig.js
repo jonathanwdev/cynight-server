@@ -8,13 +8,13 @@ module.exports = [
     'password': 'root',
     'database': 'cynight',
     'entities': [
-      './src/domain/typeorm/entities/*.ts'
+      './src/modules/**/infra/typeorm/entities/*.ts'
     ],
     'migrations': [
-      './src/shared/typeorm/migrations/*.ts'
+      './src/shared/database/migrations/*.ts'
     ],
     'cli': {
-      'migrationsDir': './src/shared/typeorm/migrations',
+      'migrationsDir': './src/shared/database/migrations',
     },
   },
   // {

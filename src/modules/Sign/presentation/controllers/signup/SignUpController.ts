@@ -1,9 +1,5 @@
-import { MissingParamError, InvalidParamError } from '@/presentation/errors';
-import {
-  badRequest,
-  serverError,
-  okay,
-} from '@/presentation/helpers/httpHelper';
+import { MissingParamError, InvalidParamError } from '@/shared/errors';
+import { badRequest, serverError, okay } from '@/shared/helpers/httpHelper';
 import {
   HttpRequest,
   HttpResponse,

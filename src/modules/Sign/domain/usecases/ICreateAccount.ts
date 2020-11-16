@@ -1,4 +1,4 @@
-import { User } from '../typeorm/entities/User';
+import { IUser } from '@/modules/Sign/domain/models/IUser';
 
 export type ICreateAccountModel = {
   name: string;
@@ -9,5 +9,5 @@ export type ICreateAccountModel = {
 };
 
 export interface ICreateAccount {
-  create: (account: ICreateAccountModel) => Promise<User>;
+  create: (account: ICreateAccountModel) => Promise<IUser>;
 }

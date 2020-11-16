@@ -1,9 +1,9 @@
-import { User } from '@/domain/typeorm/entities/User';
+import { IUser } from '@/modules/Sign/domain/models/IUser';
 import {
   MissingParamError,
   InvalidParamError,
   ServerError,
-} from '@/presentation/errors';
+} from '@/shared/errors';
 import {
   ICreateAccountModel,
   ICreateAccount,
@@ -24,7 +24,7 @@ const makeFakeAccountRequest = () => ({
 
 const makeCreateAccount = (): ICreateAccount => {
   class CreateAccountStub implements ICreateAccount {
-    async create(account: ICreateAccountModel): Promise<User> {
+    async create(account: ICreateAccountModel): Promise<IUser> {
       const user = {
         id: 'any_id',
         email: 'any_email@mail.com',

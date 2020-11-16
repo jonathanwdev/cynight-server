@@ -33,10 +33,10 @@ export class User {
   meInTheNight?: string;
 
   @CreateDateColumn()
-  created_at?: Date;
+  created_at: Date;
 
   @UpdateDateColumn()
-  updated_at?: Date;
+  updated_at: Date;
 
   @Column('timestamp with time zone')
   deleted_at?: Date;
