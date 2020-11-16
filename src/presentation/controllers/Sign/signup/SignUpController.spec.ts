@@ -3,7 +3,12 @@ import {
   InvalidParamError,
   ServerError,
 } from '@/presentation/errors';
-import { EmailValidator } from '@/validation/protocols/emailValidator';
+import { IEmailValidator } from '@/validation/protocols/IEmailValidator';
+import { User } from '@/domain/typeorm/entities/User';
+import {
+  ICreateAccount,
+  ICreateAccountModel,
+} from '@/domain/usecases/ICreateAccount';
 import { SignUpController } from './SignUpController';
 
 const makeFakeAccountRequest = () => ({
@@ -17,8 +22,24 @@ const makeFakeAccountRequest = () => ({
   },
 });
 
-const makeFakeEmailValidator = (): EmailValidator => {
-  class EmailValidatorStub implements EmailValidator {
+const makeCreateAccount = (): ICreateAccount => {
+  class CreateAccountStub implements ICreateAccount {
+    async create(account: ICreateAccountModel): Promise<User> {
+      return {
+        id: 'any_id',
+        email: 'any_email@mail.com',
+        name: 'any_name',
+        nick: 'any_nick',
+        isInfluencer: true,
+        password: 'any_password',
+      };
+    }
+  }
+  return new CreateAccountStub();
+};
+
+const makeFakeEmailValidator = (): IEmailValidator => {
+  class EmailValidatorStub implements IEmailValidator {
     isValid(email: string): boolean {
       return true;
     }
@@ -28,15 +49,18 @@ const makeFakeEmailValidator = (): EmailValidator => {
 
 type SutTypes = {
   sut: SignUpController;
-  emailValidatorStub: EmailValidator;
+  emailValidatorStub: IEmailValidator;
+  createAccountStub: ICreateAccount;
 };
 
 const makeSut = (): SutTypes => {
   const emailValidatorStub = makeFakeEmailValidator();
-  const sut = new SignUpController(emailValidatorStub);
+  const createAccountStub = makeCreateAccount();
+  const sut = new SignUpController(emailValidatorStub, createAccountStub);
   return {
     sut,
     emailValidatorStub,
+    createAccountStub,
   };
 };
 
@@ -190,5 +214,18 @@ describe('SignUpController', () => {
     const httpResponse = sut.handle(makeFakeAccountRequest());
     expect(httpResponse.statusCode).toBe(500);
     expect(httpResponse.body).toEqual(new ServerError());
+  });
+
+  it('should  addAccount with correct values', () => {
+    const { sut, createAccountStub } = makeSut();
+    const createAccountSpy = jest.spyOn(createAccountStub, 'create');
+    sut.handle(makeFakeAccountRequest());
+    expect(createAccountSpy).toHaveBeenCalledWith({
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      nick: 'any_nick',
+      isInfluencer: true,
+      password: 'any_password',
+    });
   });
 });
