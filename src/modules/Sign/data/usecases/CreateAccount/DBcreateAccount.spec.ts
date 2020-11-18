@@ -100,4 +100,17 @@ describe('DBcreateAccount', () => {
     const promise = sut.create(makeAccountData());
     expect(promise).rejects.toThrow();
   });
+
+  it('should return a user on success', async () => {
+    const { sut } = makeSut();
+    const user = await sut.create(makeAccountData());
+    expect(user).toEqual({
+      id: 'valid_id',
+      name: 'valid_name',
+      email: 'valid_email@mail.com',
+      nick: 'valid_nick',
+      isInfluencer: false,
+      password: 'hashed_password',
+    });
+  });
 });
