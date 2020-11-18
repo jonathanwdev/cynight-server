@@ -6,6 +6,14 @@ type SutTypes = {
   sut: DBcreateAccount;
 };
 
+const makeAccountData = () => ({
+  name: 'valid_name',
+  email: 'valid_email@mail.com',
+  nick: 'valid_nick',
+  isInfluencer: false,
+  password: 'valid_password',
+});
+
 const makeHasherStub = (): IHasher => {
   class HasherStub implements IHasher {
     public async hash(value): Promise<string> {
@@ -28,14 +36,7 @@ describe('DBcreateAccount', () => {
   it('should call Hasher with correct password', async () => {
     const { sut, hasherStub } = makeSut();
     const hashSpy = jest.spyOn(hasherStub, 'hash');
-    const accountData = {
-      name: 'valid_name',
-      email: 'valid_email@mail.com',
-      nick: 'valid_nick',
-      isInfluencer: false,
-      password: 'valid_password',
-    };
-    await sut.create(accountData);
+    await sut.create(makeAccountData());
     expect(hashSpy).toHaveBeenCalledWith('valid_password');
   });
 
@@ -46,14 +47,7 @@ describe('DBcreateAccount', () => {
       .mockReturnValueOnce(
         new Promise((resolve, reject) => reject(new Error())),
       );
-    const accountData = {
-      name: 'valid_name',
-      email: 'valid_email@mail.com',
-      nick: 'valid_nick',
-      isInfluencer: false,
-      password: 'valid_password',
-    };
-    const promise = sut.create(accountData);
+    const promise = sut.create(makeAccountData());
     expect(promise).rejects.toThrow();
   });
 });
