@@ -1,15 +1,23 @@
 import {
   IUser,
+  IHasher,
   ICreateAccount,
   ICreateAccountModel,
-  IHasher,
+  ICreateAccountRepository,
 } from './importHandler';
 
 export class DBcreateAccount implements ICreateAccount {
-  constructor(private readonly hasher: IHasher) {}
+  constructor(
+    private readonly hasher: IHasher,
+    private readonly createAccountRepository: ICreateAccountRepository,
+  ) {}
 
-  public async create(account: ICreateAccountModel): Promise<IUser> {
-    await this.hasher.hash(account.password);
+  public async create(accountData: ICreateAccountModel): Promise<IUser> {
+    const hashedPassword = await this.hasher.hash(accountData.password);
+    await this.createAccountRepository.create({
+      ...accountData,
+      password: hashedPassword,
+    });
     return new Promise(resolve => resolve(null));
   }
 }
