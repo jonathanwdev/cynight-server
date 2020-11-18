@@ -14,10 +14,10 @@ export class DBcreateAccount implements ICreateAccount {
 
   public async create(accountData: ICreateAccountModel): Promise<IUser> {
     const hashedPassword = await this.hasher.hash(accountData.password);
-    await this.createAccountRepository.create({
+    const user = await this.createAccountRepository.create({
       ...accountData,
       password: hashedPassword,
     });
-    return new Promise(resolve => resolve(null));
+    return user;
   }
 }
