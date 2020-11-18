@@ -6,7 +6,7 @@ module.exports = {
     '<rootDir>/src/**/*.ts',
     '!<rootDir>/src/modules/**/infra/database/**',
     '!<rootDir>/src/shared/database/**',
-    '!**/exportProtocols.ts'
+    '!**/importHandler.ts'
   ],
   coverageDirectory: 'coverage',
   roots: [
