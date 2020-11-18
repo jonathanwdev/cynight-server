@@ -1,9 +1,9 @@
-import { IUser } from '@/modules/Sign/domain/models/IUser';
 import {
+  IUser,
   ICreateAccount,
   ICreateAccountModel,
-} from '@/modules/Sign/domain/usecases/ICreateAccount';
-import { IHasher } from '../../protocols/cryptography/IHasher';
+  IHasher,
+} from './importHandler';
 
 export class DBcreateAccount implements ICreateAccount {
   constructor(private readonly hasher: IHasher) {}

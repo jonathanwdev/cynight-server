@@ -13,7 +13,7 @@ import {
   Controller,
   IEmailValidator,
   ICreateAccount,
-} from './exportProtocols';
+} from './importHandler';
 
 export class SignUpController implements Controller {
   constructor(

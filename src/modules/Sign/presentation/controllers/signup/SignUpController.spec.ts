@@ -8,7 +8,7 @@ import {
   ICreateAccountModel,
   ICreateAccount,
   IEmailValidator,
-} from './exportProtocols';
+} from './importHandler';
 import { SignUpController } from './SignUpController';
 
 const makeFakeAccountRequest = () => ({
