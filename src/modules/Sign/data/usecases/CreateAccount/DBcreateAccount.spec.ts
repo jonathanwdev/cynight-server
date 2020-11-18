@@ -89,4 +89,15 @@ describe('DBcreateAccount', () => {
       password: 'hashed_password',
     });
   });
+
+  it('should throw  if CreateAccountRepository throws', async () => {
+    const { sut, createAcccountRepositoryStub } = makeSut();
+    jest
+      .spyOn(createAcccountRepositoryStub, 'create')
+      .mockReturnValueOnce(
+        new Promise((resolve, reject) => reject(new Error())),
+      );
+    const promise = sut.create(makeAccountData());
+    expect(promise).rejects.toThrow();
+  });
 });
