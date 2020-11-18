@@ -1,14 +1,33 @@
+import { IHasher } from '../../protocols/cryptography/IHasher';
 import { DBcreateAccount } from './DBcreateAccount';
+
+type SutTypes = {
+  hasherStub: IHasher;
+  sut: DBcreateAccount;
+};
+
+const makeHasherStub = (): IHasher => {
+  class HasherStub implements IHasher {
+    public async hash(value): Promise<string> {
+      return new Promise(resolve => resolve('hashed_password'));
+    }
+  }
+  return new HasherStub();
+};
+
+const makeSut = (): SutTypes => {
+  const hasherStub = makeHasherStub();
+  const sut = new DBcreateAccount(hasherStub);
+  return {
+    hasherStub,
+    sut,
+  };
+};
 
 describe('DBcreateAccount', () => {
   it('should call Hasher with correct password', async () => {
-    class HasherStub {
-      public async hash(value): Promise<string> {
-        return new Promise(resolve => resolve('hashed_password'));
-      }
-    }
-    const hasherStub = new HasherStub();
-    const sut = new DBcreateAccount(hasherStub);
+    const { sut, hasherStub } = makeSut();
+
     const hashSpy = jest.spyOn(hasherStub, 'hash');
     const accountData = {
       name: 'valid_name',
