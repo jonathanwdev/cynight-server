@@ -1,10 +1,10 @@
-import { IHasher } from '../../protocols/cryptography/IHasher';
+import {
+  IHasher,
+  ICreateAccountModel,
+  IUser,
+  ICreateAccountRepository,
+} from './importHandler';
 import { DBcreateAccount } from './DBcreateAccount';
-
-type SutTypes = {
-  hasherStub: IHasher;
-  sut: DBcreateAccount;
-};
 
 const makeAccountData = () => ({
   name: 'valid_name',
@@ -13,6 +13,24 @@ const makeAccountData = () => ({
   isInfluencer: false,
   password: 'valid_password',
 });
+
+const makeCreatAccountRepository = (): ICreateAccountRepository => {
+  class CreatAccountRepository implements ICreateAccountRepository {
+    public async create(account: ICreateAccountModel): Promise<IUser> {
+      return new Promise(resolve =>
+        resolve({
+          id: 'valid_id',
+          name: 'valid_name',
+          email: 'valid_email@mail.com',
+          nick: 'valid_nick',
+          isInfluencer: false,
+          password: 'hashed_password',
+        }),
+      );
+    }
+  }
+  return new CreatAccountRepository();
+};
 
 const makeHasherStub = (): IHasher => {
   class HasherStub implements IHasher {
@@ -23,12 +41,20 @@ const makeHasherStub = (): IHasher => {
   return new HasherStub();
 };
 
+type SutTypes = {
+  hasherStub: IHasher;
+  sut: DBcreateAccount;
+  createAcccountRepositoryStub: ICreateAccountRepository;
+};
+
 const makeSut = (): SutTypes => {
   const hasherStub = makeHasherStub();
-  const sut = new DBcreateAccount(hasherStub);
+  const createAcccountRepositoryStub = makeCreatAccountRepository();
+  const sut = new DBcreateAccount(hasherStub, createAcccountRepositoryStub);
   return {
     hasherStub,
     sut,
+    createAcccountRepositoryStub,
   };
 };
 
@@ -49,5 +75,18 @@ describe('DBcreateAccount', () => {
       );
     const promise = sut.create(makeAccountData());
     expect(promise).rejects.toThrow();
+  });
+
+  it('should call CreateAccountRepository with correct values', async () => {
+    const { sut, createAcccountRepositoryStub } = makeSut();
+    const hashSpy = jest.spyOn(createAcccountRepositoryStub, 'create');
+    await sut.create(makeAccountData());
+    expect(hashSpy).toHaveBeenCalledWith({
+      name: 'valid_name',
+      email: 'valid_email@mail.com',
+      nick: 'valid_nick',
+      isInfluencer: false,
+      password: 'hashed_password',
+    });
   });
 });
