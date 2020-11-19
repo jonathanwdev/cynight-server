@@ -11,10 +11,10 @@ module.exports = [
       './src/modules/**/infra/typeorm/entities/*.ts'
     ],
     'migrations': [
-      './src/shared/database/migrations/*.ts'
+      './src/shared/infra/database/migrations/*.ts'
     ],
     'cli': {
-      'migrationsDir': './src/shared/database/migrations',
+      'migrationsDir': './src/shared/infra/database/migrations',
     },
   },
   // {
