@@ -5,7 +5,7 @@ module.exports = {
   collectCoverageFrom: [
     '<rootDir>/src/**/*.ts',
     '!<rootDir>/src/modules/**/infra/database/**',
-    '!<rootDir>/src/shared/database/**',
+    '!<rootDir>/src/shared/infra/database/index.ts',
     '!**/importHandler.ts'
   ],
   coverageDirectory: 'coverage',
