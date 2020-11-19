@@ -84,7 +84,7 @@ describe('DBcreateAccount', () => {
         new Promise((resolve, reject) => reject(new Error())),
       );
     const promise = sut.create(makeAccountData());
-    expect(promise).rejects.toThrow();
+    await expect(promise).rejects.toThrow();
   });
 
   it('should call CreateAccountRepository with correct values', async () => {
@@ -108,7 +108,7 @@ describe('DBcreateAccount', () => {
         new Promise((resolve, reject) => reject(new Error())),
       );
     const promise = sut.create(makeAccountData());
-    expect(promise).rejects.toThrow();
+    await expect(promise).rejects.toThrow();
   });
 
   it('should return a user on success', async () => {
