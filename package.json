@@ -16,6 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "mockdate": "^3.0.2",
     "pg": "^8.5.1",
     "typeorm": "^0.2.29",
     "validator": "^13.1.17"
