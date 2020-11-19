@@ -4,6 +4,7 @@ import {
   InvalidParamError,
   ServerError,
 } from '@/shared/presentation/errors';
+import Mockdate from 'mockdate';
 import {
   ICreateAccountModel,
   ICreateAccount,
@@ -32,6 +33,7 @@ const makeCreateAccount = (): ICreateAccount => {
         nick: 'any_nick',
         isInfluencer: true,
         password: 'any_password',
+        created_at: new Date(),
       };
 
       return new Promise(resolve => resolve(user));
@@ -67,6 +69,13 @@ const makeSut = (): SutTypes => {
 };
 
 describe('SignUpController', () => {
+  beforeAll(() => {
+    Mockdate.set(new Date());
+  });
+
+  afterAll(() => {
+    Mockdate.reset();
+  });
   it('should  return 400 if no name is provided', async () => {
     const { sut } = makeSut();
     const httpRequest = {
@@ -243,6 +252,7 @@ describe('SignUpController', () => {
       nick: 'any_nick',
       isInfluencer: true,
       password: 'any_password',
+      created_at: new Date(),
     });
   });
 });

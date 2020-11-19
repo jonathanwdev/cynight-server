@@ -1,3 +1,4 @@
+import Mockdate from 'mockdate';
 import {
   IHasher,
   ICreateAccountModel,
@@ -25,6 +26,7 @@ const makeCreatAccountRepository = (): ICreateAccountRepository => {
           nick: 'valid_nick',
           isInfluencer: false,
           password: 'hashed_password',
+          created_at: new Date(),
         }),
       );
     }
@@ -59,6 +61,14 @@ const makeSut = (): SutTypes => {
 };
 
 describe('DBcreateAccount', () => {
+  beforeAll(() => {
+    Mockdate.set(new Date());
+  });
+
+  afterAll(() => {
+    Mockdate.reset();
+  });
+
   it('should call Hasher with correct password', async () => {
     const { sut, hasherStub } = makeSut();
     const hashSpy = jest.spyOn(hasherStub, 'hash');
@@ -111,6 +121,7 @@ describe('DBcreateAccount', () => {
       nick: 'valid_nick',
       isInfluencer: false,
       password: 'hashed_password',
+      created_at: new Date(),
     });
   });
 });
