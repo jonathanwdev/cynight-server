@@ -18,6 +18,7 @@ module.exports = {
   ],
   testEnvironment: 'node',
   coveragePathIgnorePatterns: [
+    '/migrations/',
     '/protocols/'
   ],
   moduleNameMapper: {
