@@ -1,31 +1,28 @@
+require('dotenv/config')
+
 module.exports = [
   {
-    'name': 'default',
-    'type': 'postgres',
-    'port': 5432,
-    'host': 'localhost',
-    'username': 'postgres',
-    'password': 'root',
-    'database': 'cynight',
-    'entities': [
-      './src/modules/**/infra/typeorm/entities/*.ts'
+    name: 'default',
+    type: 'postgres',
+    port: process.env.POSTGRES_PORT,
+    host: process.env.POSTGRES_HOST,
+    username: process.env.POSTGRES_USER,
+    password: process.env.POSTGRES_PASSWORD,
+    database: process.env.ENVIRONMENT === 'development' ? 'tests' : 'cynight',
+    dropSchema: true,
+    logging: false,
+    synchroize: true,
+    migrationsRun: true,
+    entities: [
+      './src/modules/**/infra/database/typeorm/entities/*.ts'
     ],
-    'migrations': [
+    migrations: [
       './src/shared/infra/database/migrations/*.ts'
     ],
-    'cli': {
-      'migrationsDir': './src/shared/infra/database/migrations',
+    cli: {
+      entitiesDir: './src/modules/**/infra/database/typeorm/entities',
+      migrationsDir: './src/shared/infra/database/migrations',
     },
   },
-  // {
-  //   name: 'mongo',
-  //   type: 'mongodb',
-  //   host: process.env.MONGO_HOST,
-  //   port: 27017,
-  //   database: process.env.MONGO_NAME,
-  //   useUnifiedTopology: true,
-  //   entities: [
-  //     './src/modules/**/infra/typeorm/schemas/*.ts'
-  //   ]
-  // }
+  
 ];

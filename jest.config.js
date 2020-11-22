@@ -16,12 +16,14 @@ module.exports = {
     "**/*.spec.ts",
     "**/*.test.ts",
   ],
-  // preset: '@shelf/jest-mongodb',
   testEnvironment: 'node',
   coveragePathIgnorePatterns: [
     '/protocols/'
   ],
   moduleNameMapper: {
     '@/(.*)': '<rootDir>/src/$1'
-  }
+  },
+  clearMocks: true,
+  maxWorkers: 1,
+  preset: 'ts-jest',
 }
