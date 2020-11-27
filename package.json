@@ -4,14 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js",
+    "typeorm": "ts-node-dev -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:verbose": "jest --passWithNoTests",
     "test:unit": "npm test -- --watch -c jest-unit-config.js",
     "test:integration": "npm test -- --watch -c jest-integration-config.js",
     "test:staged": "npm test -- --findRelatedTests",
     "test:ci": "npm test -- --coverage",
-    "dev": "ts-node-dev --transpile-only ./src/shared/main/server.ts"
+    "dev": "ts-node-dev -r tsconfig-paths/register --transpile-only ./src/shared/main/server.ts"
   },
   "keywords": [],
   "author": "",
@@ -20,10 +20,10 @@
     "bcrypt": "^5.0.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "mockdate": "^3.0.2",
     "pg": "^8.5.1",
     "typeorm": "^0.2.29",
-    "validator": "^13.1.17",
-    "mockdate": "^3.0.2"
+    "validator": "^13.1.17"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
@@ -48,6 +48,7 @@
     "supertest": "^6.0.1",
     "ts-jest": "^26.4.4",
     "ts-node-dev": "^1.0.0",
+    "tsconfig-paths": "^3.9.0",
     "typescript": "^4.0.5"
   }
 }
