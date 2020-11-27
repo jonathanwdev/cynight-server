@@ -9,15 +9,15 @@ const connection = {
     await getConnection().close();
   },
 
-  // async clear(): Promise<void> {
-  //   const conn = getConnection();
-  //   const entities = conn.entityMetadatas;
+  async clear(): Promise<void> {
+    const conn = getConnection();
+    const entities = conn.entityMetadatas;
 
-  //   entities.forEach(async entity => {
-  //     const repository = conn.getRepository(entity.name);
-  //     await repository.query(`DELETE FROM ${entity.tableName}`);
-  //   });
-  // },
+    entities.forEach(async entity => {
+      const repository = conn.getRepository(entity.name);
+      await repository.query(`DELETE FROM ${entity.tableName}`);
+    });
+  },
 };
 
 export default connection;
