@@ -28,7 +28,6 @@ export class SignUpController implements Controller {
         'name',
         'email',
         'nick',
-        'isInfluencer',
         'password',
         'passwordConfirmation',
       ];

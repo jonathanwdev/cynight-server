@@ -108,7 +108,7 @@ describe('SignUpController', () => {
     expect(httpResponse.body).toEqual(new MissingParamError('email'));
   });
 
-  it('should  return 400 if no n ick is provided', async () => {
+  it('should  return 400 if no nick is provided', async () => {
     const { sut } = makeSut();
     const httpRequest = {
       body: {
@@ -122,22 +122,6 @@ describe('SignUpController', () => {
     const httpResponse = await sut.handle(httpRequest);
     expect(httpResponse.statusCode).toBe(400);
     expect(httpResponse.body).toEqual(new MissingParamError('nick'));
-  });
-
-  it('should  return 400 if no  isInfluencer provided', async () => {
-    const { sut } = makeSut();
-    const httpRequest = {
-      body: {
-        name: 'any_name',
-        email: 'any_email@mail.com',
-        nick: 'any_nick',
-        password: 'any_password',
-        passwordConfirmation: 'any_password',
-      },
-    };
-    const httpResponse = await sut.handle(httpRequest);
-    expect(httpResponse.statusCode).toBe(400);
-    expect(httpResponse.body).toEqual(new MissingParamError('isInfluencer'));
   });
 
   it('should  return 400 if no  password provided', async () => {
