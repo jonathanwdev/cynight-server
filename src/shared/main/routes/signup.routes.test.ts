@@ -1,7 +1,18 @@
 import request from 'supertest';
+import connection from '../../infra/database/helpers/PgHelper';
 import app from '../config/app';
 
 describe('SignUp Routes', () => {
+  beforeAll(async () => {
+    await connection.create();
+  });
+  afterAll(async () => {
+    await connection.close();
+  });
+
+  beforeEach(async () => {
+    await connection.clear();
+  });
   it('should return an account on success', async () => {
     await request(app)
       .post('/api/signup')
