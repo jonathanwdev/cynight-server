@@ -7,15 +7,10 @@ import {
 import { User } from '../entities/User';
 
 export class AccountRepository implements ICreateAccountRepository {
-  private readonly ormRepository: Repository<User>;
-
-  constructor() {
-    this.ormRepository = getRepository(User);
-  }
-
   public async create(accountData: ICreateAccountModel): Promise<IUser> {
-    const user = this.ormRepository.create(accountData);
-    await this.ormRepository.save(user);
+    const ormRepository: Repository<User> = getRepository(User);
+    const user = ormRepository.create(accountData);
+    await ormRepository.save(user);
     return user;
   }
 }
