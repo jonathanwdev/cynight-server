@@ -23,7 +23,12 @@ export class SignUpController implements Controller {
 
   public async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      const { email, password, passwordConfirmation } = httpRequest.body;
+      const {
+        email,
+        password,
+        isInfluencer,
+        passwordConfirmation,
+      } = httpRequest.body;
       const requiredFields = [
         'name',
         'email',
@@ -39,6 +44,10 @@ export class SignUpController implements Controller {
       }
       if (password !== passwordConfirmation) {
         return badRequest(new InvalidParamError('passwordConfirmation'));
+      }
+
+      if (typeof isInfluencer !== 'boolean') {
+        return badRequest(new MissingParamError('isInfluencer'));
       }
 
       const isValid = this.emailValidator.isValid(email);
