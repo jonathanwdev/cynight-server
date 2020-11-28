@@ -158,6 +158,22 @@ describe('SignUpController', () => {
     );
   });
 
+  it('should  return 400 if no isInfluencer is provided', async () => {
+    const { sut } = makeSut();
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        nick: 'any_nick',
+        password: 'any_password',
+        passwordConfirmation: 'any_password',
+      },
+    };
+    const httpResponse = await sut.handle(httpRequest);
+    expect(httpResponse.statusCode).toBe(400);
+    expect(httpResponse.body).toEqual(new MissingParamError('isInfluencer'));
+  });
+
   it('should  return 400 if passwordConfirmation fails', async () => {
     const { sut } = makeSut();
     const httpRequest = {
@@ -177,7 +193,7 @@ describe('SignUpController', () => {
     );
   });
 
-  it('should  return 400 if an invalid email is provided', async () => {
+  it('should  return 400 if isInfluencer is undefined', async () => {
     const { sut, emailValidatorStub } = makeSut();
     jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false);
     const httpResponse = await sut.handle(makeFakeAccountRequest());
