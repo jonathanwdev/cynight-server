@@ -1,5 +1,5 @@
 import request from 'supertest';
-import connection from '../../infra/database/helpers/PgHelper';
+import connection from '../../infra/database/helpers/DatabaseConn';
 import app from '../config/app';
 
 describe('SignUp Routes', () => {

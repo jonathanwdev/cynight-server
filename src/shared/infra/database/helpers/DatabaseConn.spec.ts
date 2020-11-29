@@ -1,13 +1,13 @@
 import { getConnection } from 'typeorm';
-import PgHelper from './PgHelper';
+import DbConn from './DatabaseConn';
 
-describe('PgHelper', () => {
+describe('DbConn', () => {
   beforeAll(async () => {
-    await PgHelper.create();
+    await DbConn.create();
   });
 
   afterAll(async () => {
-    await PgHelper.close();
+    await DbConn.close();
   });
   it('should connect and disconect', async () => {
     const connectionStatus = await getConnection();

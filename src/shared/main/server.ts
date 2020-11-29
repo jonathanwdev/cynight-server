@@ -1,6 +1,6 @@
-import ConnectionHelper from '../infra/database/helpers/PgHelper';
+import DatabaseConn from '../infra/database/helpers/DatabaseConn';
 
-ConnectionHelper.create()
+DatabaseConn.create()
   .then(async () => {
     const app = (await import('./config/app')).default;
     app.listen(process.env.APP_PORT, () =>

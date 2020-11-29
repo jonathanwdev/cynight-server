@@ -1,4 +1,4 @@
-import connection from '@/shared/infra/database/helpers/PgHelper';
+import connection from '@/shared/infra/database/helpers/DatabaseConn';
 import { AccountRepository } from './AccountRepository';
 
 const makeSut = (): AccountRepository => {
