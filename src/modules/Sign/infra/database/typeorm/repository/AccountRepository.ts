@@ -4,7 +4,7 @@ import {
   ICreateAccountRepository,
   IUser,
 } from '@/modules/Sign/data/usecases/CreateAccount/importHandler';
-import { User } from '../entities/User';
+import { User } from '@/shared/infra/database/entities/User';
 
 export class AccountRepository implements ICreateAccountRepository {
   public async create(accountData: ICreateAccountModel): Promise<IUser> {
