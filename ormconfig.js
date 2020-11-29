@@ -14,15 +14,26 @@ module.exports = [
     synchroize: true,
     migrationsRun: true,
     entities: [
-      './src/modules/**/infra/database/typeorm/entities/*.ts'
+      './src/shared/infra/database/entities/*.ts'
     ],
     migrations: [
       './src/shared/infra/database/migrations/*.ts'
     ],
     cli: {
-      entitiesDir: './src/modules/**/infra/database/typeorm/entities',
+      entitiesDir: './src/shared/infra/database/entities',
       migrationsDir: './src/shared/infra/database/migrations',
     },
   },
+  {
+    name: 'mongo',
+    type: 'mongodb',
+    host: 'localhost',
+    port: process.env.MONGO_PORT,
+    database: process.env.MONGO_DBNAME,
+    useUnifiedTopology: true,
+    entities: [
+      './src/shared/infra/database/schemas/*.ts'
+    ]
+  }
   
 ];
