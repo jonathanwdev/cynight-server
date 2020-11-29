@@ -6,16 +6,27 @@ const connection = {
   },
 
   async close(): Promise<void> {
-    await getConnection().close();
+    Promise.all([
+      await getConnection('default').close(),
+      await getConnection('mongo').close(),
+    ]);
   },
 
   async clear(): Promise<void> {
-    const conn = getConnection();
-    const entities = conn.entityMetadatas;
+    const conn1 = getConnection('default');
+    const entities1 = conn1.entityMetadatas;
 
-    entities.forEach(async entity => {
-      const repository = conn.getRepository(entity.name);
-      await repository.query(`DELETE FROM ${entity.tableName}`);
+    entities1.forEach(async entity => {
+      const repository = conn1.getRepository(entity.name);
+      await repository.clear();
+    });
+
+    const conn2 = getConnection('mongo');
+    const entities2 = conn2.entityMetadatas;
+
+    entities2.forEach(async entity => {
+      const repository = conn2.getRepository(entity.name);
+      await repository.clear();
     });
   },
 };
