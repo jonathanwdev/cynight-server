@@ -22,6 +22,17 @@ const makeController = (): Controller => {
   return new ControllerStub();
 };
 
+const makeFakeRequest = (): HttpRequest => ({
+  body: {
+    name: 'any_name',
+    email: 'any_email@mail.com',
+    nick: 'any_nick',
+    isInfluencer: false,
+    password: 'any_password',
+    passwordConfirmation: 'any_password',
+  },
+});
+
 const makeLogErrorRepository = (): LogErrorRepository => {
   class LogErrorRepositoryStub implements LogErrorRepository {
     async log(stackError: string): Promise<void> {
@@ -56,33 +67,13 @@ describe('LogController Decorator', () => {
   it('should call controller handle', async () => {
     const { controllerStub, sut } = makeSut();
     const handleSpy = jest.spyOn(controllerStub, 'handle');
-    const httpRequest = {
-      body: {
-        name: 'any_name',
-        email: 'any_email@mail.com',
-        nick: 'any_nick',
-        isInfluencer: false,
-        password: 'any_password',
-        passwordConfirmation: 'any_password',
-      },
-    };
-    await sut.handle(httpRequest);
-    expect(handleSpy).toHaveBeenCalledWith(httpRequest);
+    await sut.handle(makeFakeRequest());
+    expect(handleSpy).toHaveBeenCalledWith(makeFakeRequest());
   });
 
   it('should return the same result of the controller', async () => {
     const { sut } = makeSut();
-    const httpRequest = {
-      body: {
-        name: 'any_name',
-        email: 'any_email@mail.com',
-        nick: 'any_nick',
-        isInfluencer: false,
-        password: 'any_password',
-        passwordConfirmation: 'any_password',
-      },
-    };
-    const httpResponse = await sut.handle(httpRequest);
+    const httpResponse = await sut.handle(makeFakeRequest());
     expect(httpResponse).toEqual({
       statusCode: 200,
       body: {
@@ -101,17 +92,7 @@ describe('LogController Decorator', () => {
       .mockReturnValueOnce(
         new Promise(resolve => resolve(serverError(fakeError))),
       );
-    const httpRequest = {
-      body: {
-        name: 'any_name',
-        email: 'any_email@mail.com',
-        nick: 'any_nick',
-        isInfluencer: false,
-        password: 'any_password',
-        passwordConfirmation: 'any_password',
-      },
-    };
-    await sut.handle(httpRequest);
+    await sut.handle(makeFakeRequest());
     expect(logSpy).toHaveBeenCalledWith('any_stack');
   });
 });
