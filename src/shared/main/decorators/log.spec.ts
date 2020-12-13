@@ -4,19 +4,26 @@ import {
   HttpRequest,
 } from '@/shared/presentation/protocols';
 import { LogErrorRepository } from '@/shared/data/protocols/logErrorRepository';
-import { serverError } from '@/shared/presentation/helpers/httpHelper';
+import { serverError, okay } from '@/shared/presentation/helpers/httpHelper';
+import { IUser } from '@/modules/Sign/domain/models/IUser';
+import Mockdate from 'mockdate';
 import { LogControllerDecorator } from './log';
+
+const makeFakeAccount = (): IUser => ({
+  id: 'any_id',
+  name: 'any_name',
+  email: 'any_email@mail.com',
+  nick: 'any_nick',
+  isInfluencer: true,
+  password: 'any_password',
+  created_at: new Date(),
+  updated_at: new Date(),
+});
 
 const makeController = (): Controller => {
   class ControllerStub implements Controller {
     async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-      const httpResponse = {
-        statusCode: 200,
-        body: {
-          name: 'joselito',
-        },
-      };
-      return new Promise(resolve => resolve(httpResponse));
+      return new Promise(resolve => resolve(okay(makeFakeAccount())));
     }
   }
   return new ControllerStub();
@@ -64,6 +71,13 @@ const makeSut = (): SutTypes => {
 };
 
 describe('LogController Decorator', () => {
+  beforeAll(() => {
+    Mockdate.set(new Date());
+  });
+
+  afterAll(() => {
+    Mockdate.reset();
+  });
   it('should call controller handle', async () => {
     const { controllerStub, sut } = makeSut();
     const handleSpy = jest.spyOn(controllerStub, 'handle');
@@ -74,12 +88,7 @@ describe('LogController Decorator', () => {
   it('should return the same result of the controller', async () => {
     const { sut } = makeSut();
     const httpResponse = await sut.handle(makeFakeRequest());
-    expect(httpResponse).toEqual({
-      statusCode: 200,
-      body: {
-        name: 'joselito',
-      },
-    });
+    expect(httpResponse).toEqual(okay(makeFakeAccount()));
   });
 
   it('should call LogErrorRepository with correct error if controller returns a server error', async () => {
