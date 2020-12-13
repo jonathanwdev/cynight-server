@@ -3,6 +3,10 @@ import { getMongoRepository, MongoRepository } from 'typeorm';
 import LogError from '../schemas/LogError';
 import { LogMongoRepository } from './LogMongoRepository';
 
+const makeSut = (): LogMongoRepository => {
+  return new LogMongoRepository();
+};
+
 describe('Name of the group', () => {
   let errorRepository: MongoRepository<LogError>;
 
@@ -19,7 +23,7 @@ describe('Name of the group', () => {
   });
 
   it('should create an error log on success', async () => {
-    const sut = new LogMongoRepository();
+    const sut = makeSut();
     await sut.logError('any_error');
     errorRepository = getMongoRepository(LogError, 'mongo');
     const count = await errorRepository.count();
