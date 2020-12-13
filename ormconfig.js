@@ -27,10 +27,10 @@ module.exports = [
   {
     name: 'mongo',
     type: 'mongodb',
-    host: 'localhost',
-    port: process.env.MONGO_PORT,
+    url: process.env.MONGO_URL,
     database: process.env.MONGO_DBNAME,
     useUnifiedTopology: true,
+    useNewUrlParser: true,
     entities: [
       './src/shared/infra/database/schemas/*.ts'
     ]
