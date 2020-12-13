@@ -11,7 +11,7 @@ describe('SignUp Routes', () => {
   });
 
   beforeEach(async () => {
-    await connection.clear();
+    await connection.clearDefault();
   });
   it('should return an account on success', async () => {
     await request(app)

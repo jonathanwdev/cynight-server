@@ -12,7 +12,7 @@ const connection = {
     ]);
   },
 
-  async clear(): Promise<void> {
+  async clearDefault(): Promise<void> {
     const conn1 = getConnection('default');
     const entities1 = conn1.entityMetadatas;
 
@@ -20,7 +20,9 @@ const connection = {
       const repository = conn1.getRepository(entity.name);
       await repository.clear();
     });
+  },
 
+  async clearMongo(): Promise<void> {
     const conn2 = getConnection('mongo');
     const entities2 = conn2.entityMetadatas;
 
