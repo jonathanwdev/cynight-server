@@ -60,7 +60,7 @@ export class SignUpController implements Controller {
       const account = await this.createAccount.create(httpRequest.body);
       return okay(account);
     } catch (error) {
-      return serverError();
+      return serverError(error);
     }
   }
 }
