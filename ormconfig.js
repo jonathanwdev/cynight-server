@@ -29,6 +29,7 @@ module.exports = [
     type: 'mongodb',
     url: process.env.MONGO_URL,
     database: process.env.MONGO_DBNAME,
+    synchronize: true,
     useUnifiedTopology: true,
     useNewUrlParser: true,
     entities: [
