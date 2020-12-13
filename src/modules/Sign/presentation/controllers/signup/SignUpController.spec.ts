@@ -6,6 +6,11 @@ import {
 } from '@/shared/presentation/errors';
 import Mockdate from 'mockdate';
 import {
+  okay,
+  serverError,
+  badRequest,
+} from '@/shared/presentation/helpers/httpHelper';
+import {
   ICreateAccountModel,
   ICreateAccount,
   IEmailValidator,
@@ -23,20 +28,21 @@ const makeFakeAccountRequest = () => ({
   },
 });
 
+const makeFakeAccount = () => ({
+  id: 'any_id',
+  name: 'any_name',
+  email: 'any_email@mail.com',
+  nick: 'any_nick',
+  isInfluencer: true,
+  password: 'any_password',
+  created_at: new Date(),
+  updated_at: new Date(),
+});
+
 const makeCreateAccount = (): ICreateAccount => {
   class CreateAccountStub implements ICreateAccount {
     async create(account: ICreateAccountModel): Promise<IUser> {
-      const user = {
-        id: 'any_id',
-        email: 'any_email@mail.com',
-        name: 'any_name',
-        nick: 'any_nick',
-        isInfluencer: true,
-        password: 'any_password',
-        created_at: new Date(),
-      };
-
-      return new Promise(resolve => resolve(user));
+      return new Promise(resolve => resolve(makeFakeAccount()));
     }
   }
   return new CreateAccountStub();
@@ -88,8 +94,7 @@ describe('SignUpController', () => {
       },
     };
     const httpResponse = await sut.handle(httpRequest);
-    expect(httpResponse.statusCode).toBe(400);
-    expect(httpResponse.body).toEqual(new MissingParamError('name'));
+    expect(httpResponse).toEqual(badRequest(new MissingParamError('name')));
   });
 
   it('should  return 400 if no email is provided', async () => {
@@ -104,8 +109,7 @@ describe('SignUpController', () => {
       },
     };
     const httpResponse = await sut.handle(httpRequest);
-    expect(httpResponse.statusCode).toBe(400);
-    expect(httpResponse.body).toEqual(new MissingParamError('email'));
+    expect(httpResponse).toEqual(badRequest(new MissingParamError('email')));
   });
 
   it('should  return 400 if no nick is provided', async () => {
@@ -120,8 +124,7 @@ describe('SignUpController', () => {
       },
     };
     const httpResponse = await sut.handle(httpRequest);
-    expect(httpResponse.statusCode).toBe(400);
-    expect(httpResponse.body).toEqual(new MissingParamError('nick'));
+    expect(httpResponse).toEqual(badRequest(new MissingParamError('nick')));
   });
 
   it('should  return 400 if no  password provided', async () => {
@@ -136,8 +139,7 @@ describe('SignUpController', () => {
       },
     };
     const httpResponse = await sut.handle(httpRequest);
-    expect(httpResponse.statusCode).toBe(400);
-    expect(httpResponse.body).toEqual(new MissingParamError('password'));
+    expect(httpResponse).toEqual(badRequest(new MissingParamError('password')));
   });
 
   it('should  return 400 if no  passwordConfirmation provided', async () => {
@@ -152,9 +154,8 @@ describe('SignUpController', () => {
       },
     };
     const httpResponse = await sut.handle(httpRequest);
-    expect(httpResponse.statusCode).toBe(400);
-    expect(httpResponse.body).toEqual(
-      new MissingParamError('passwordConfirmation'),
+    expect(httpResponse).toEqual(
+      badRequest(new MissingParamError('passwordConfirmation')),
     );
   });
 
@@ -170,8 +171,9 @@ describe('SignUpController', () => {
       },
     };
     const httpResponse = await sut.handle(httpRequest);
-    expect(httpResponse.statusCode).toBe(400);
-    expect(httpResponse.body).toEqual(new MissingParamError('isInfluencer'));
+    expect(httpResponse).toEqual(
+      badRequest(new MissingParamError('isInfluencer')),
+    );
   });
 
   it('should  return 400 if passwordConfirmation fails', async () => {
@@ -187,9 +189,8 @@ describe('SignUpController', () => {
       },
     };
     const httpResponse = await sut.handle(httpRequest);
-    expect(httpResponse.statusCode).toBe(400);
-    expect(httpResponse.body).toEqual(
-      new InvalidParamError('passwordConfirmation'),
+    expect(httpResponse).toEqual(
+      badRequest(new InvalidParamError('passwordConfirmation')),
     );
   });
 
@@ -197,8 +198,7 @@ describe('SignUpController', () => {
     const { sut, emailValidatorStub } = makeSut();
     jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false);
     const httpResponse = await sut.handle(makeFakeAccountRequest());
-    expect(httpResponse.statusCode).toBe(400);
-    expect(httpResponse.body).toEqual(new InvalidParamError('email'));
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('email')));
   });
 
   it('should  call  emailValidator with correct email', async () => {
@@ -214,8 +214,7 @@ describe('SignUpController', () => {
       throw new Error();
     });
     const httpResponse = await sut.handle(makeFakeAccountRequest());
-    expect(httpResponse.statusCode).toBe(500);
-    expect(httpResponse.body).toEqual(new ServerError(null));
+    expect(httpResponse).toEqual(serverError(new ServerError(null)));
   });
 
   it('should  addAccount with correct values', async () => {
@@ -237,22 +236,12 @@ describe('SignUpController', () => {
       return new Promise((resolve, reject) => reject(new Error()));
     });
     const httpResponse = await sut.handle(makeFakeAccountRequest());
-    expect(httpResponse.statusCode).toBe(500);
-    expect(httpResponse.body).toEqual(new ServerError(null));
+    expect(httpResponse).toEqual(serverError(new ServerError(null)));
   });
 
   it('should  return 200 valid data is provided', async () => {
     const { sut } = makeSut();
     const httpResponse = await sut.handle(makeFakeAccountRequest());
-    expect(httpResponse.statusCode).toBe(200);
-    expect(httpResponse.body).toEqual({
-      id: 'any_id',
-      name: 'any_name',
-      email: 'any_email@mail.com',
-      nick: 'any_nick',
-      isInfluencer: true,
-      password: 'any_password',
-      created_at: new Date(),
-    });
+    expect(httpResponse).toEqual(okay(makeFakeAccount()));
   });
 });
