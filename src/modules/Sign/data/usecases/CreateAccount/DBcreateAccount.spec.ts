@@ -15,20 +15,21 @@ const makeAccountData = () => ({
   password: 'valid_password',
 });
 
+const makeFakeAccount = () => ({
+  id: 'valid_id',
+  name: 'valid_name',
+  email: 'valid_email@mail.com',
+  nick: 'valid_nick',
+  isInfluencer: false,
+  password: 'hashed_password',
+  created_at: new Date(),
+  updated_at: new Date(),
+});
+
 const makeCreatAccountRepository = (): ICreateAccountRepository => {
   class CreatAccountRepository implements ICreateAccountRepository {
     public async create(account: ICreateAccountModel): Promise<IUser> {
-      return new Promise(resolve =>
-        resolve({
-          id: 'valid_id',
-          name: 'valid_name',
-          email: 'valid_email@mail.com',
-          nick: 'valid_nick',
-          isInfluencer: false,
-          password: 'hashed_password',
-          created_at: new Date(),
-        }),
-      );
+      return new Promise(resolve => resolve(makeFakeAccount()));
     }
   }
   return new CreatAccountRepository();
@@ -114,14 +115,6 @@ describe('DBcreateAccount', () => {
   it('should return a user on success', async () => {
     const { sut } = makeSut();
     const user = await sut.create(makeAccountData());
-    expect(user).toEqual({
-      id: 'valid_id',
-      name: 'valid_name',
-      email: 'valid_email@mail.com',
-      nick: 'valid_nick',
-      isInfluencer: false,
-      password: 'hashed_password',
-      created_at: new Date(),
-    });
+    expect(user).toEqual(makeFakeAccount());
   });
 });
