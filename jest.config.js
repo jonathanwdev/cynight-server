@@ -17,6 +17,7 @@ module.exports = {
     "**/*.test.ts",
   ],
   testEnvironment: 'node',
+  preset: '@shelf/jest-mongodb',
   coveragePathIgnorePatterns: [
     '/migrations/',
     '/protocols/'
