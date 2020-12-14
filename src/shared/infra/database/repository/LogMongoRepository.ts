@@ -8,8 +8,9 @@ export class LogMongoRepository implements LogErrorRepository {
       LogError,
       'mongo',
     );
-    await ormRepository.insertOne({
-      stack,
+    const logError = await ormRepository.create({
+      error: stack,
     });
+    await ormRepository.save(logError);
   }
 }
