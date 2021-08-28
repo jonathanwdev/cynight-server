@@ -1,0 +1,17 @@
+version: '3.3'
+volumes:
+  data:
+services:
+  postgres:
+    image: postgres
+    restart: always
+    container_name: cynight
+    working_dir: /application
+    volumes:
+      - ./data:/var/lib/postgresql/data:z
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=cynight
+    ports:
+      - '5432:5432'
