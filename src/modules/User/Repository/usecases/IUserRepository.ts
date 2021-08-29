@@ -17,7 +17,5 @@ export interface IUserRepository {
   findAllActiveUsers: () => Promise<User[] | []>;
   findOneUserByEmailOrID: (params: findUserParams) => Promise<User | undefined>;
   createUser: (data: createUserData) => Promise<User>;
-  deleteUserByEmailOrID: (
-    params: findUserParams,
-  ) => Promise<User | null | undefined>;
+  deleteUserByEmailOrID: (params: findUserParams) => Promise<User | null>;
 }
