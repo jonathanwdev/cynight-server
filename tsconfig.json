@@ -32,7 +32,8 @@
       "@Modules/*":["modules/*"],
       "@Typeorm/*":["typeorm/*"],
       "@Config/*":["config/*"],
-      "@Utils/*":["utils/*"]
+      "@Utils/*":["utils/*"],
+      "@Helpers/*":["helpers/*"]
     }
   },
   "exclude": [

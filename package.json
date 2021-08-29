@@ -43,7 +43,8 @@
     "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/index.ts",
     "typeorm": "ts-node-dev -r tsconfig-paths/register ./node_modules/typeorm/cli",
     "build": "tsc",
-    "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
-    "test:watch":"yarn test --coverage --watch"
+    "test": "jest --passWithNoTests",
+    "test:watch":"yarn test --coverage --watch --verbose",
+    "test:silent":"yarn test --silent --noStackTrace --runInBand --watch"
   }
 }
