@@ -38,7 +38,7 @@ export class CreateUsers1630022313905 implements MigrationInterface {
             type: 'varchar',
           },
           {
-            name: 'inTheNight',
+            name: 'onTheNight',
             type: 'varchar',
             isNullable: true,
           },
@@ -49,7 +49,7 @@ export class CreateUsers1630022313905 implements MigrationInterface {
           },
           {
             name: 'deleted_at',
-            type: 'date',
+            type: 'timestamp',
             isNullable: true,
             default: null,
           },
