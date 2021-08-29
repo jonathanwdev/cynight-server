@@ -19,16 +19,23 @@ export class UserRepositoryFake implements IUserRepository {
     user.password = data.password;
     user.created_at = new Date();
     user.updated_at = new Date();
+
     this.users.push(user);
+
     return user;
   }
   public async findAllActiveUsers(): Promise<User[] | []> {
-    return this.users.filter(u => u.deleted_at !== null);
+    const { users } = this;
+    users.filter(u => u.deleted_at !== null);
+    return users;
   }
 
   public async findOneUserByEmailOrID(
     params: findUserParams,
   ): Promise<User | undefined> {
+    if (!params.email || !params.id) {
+      return undefined;
+    }
     const user = this.users.find(
       u => u.id === params.id || u.email === params.email,
     );
