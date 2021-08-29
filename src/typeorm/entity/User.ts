@@ -23,6 +23,7 @@ class User extends BaseEntity {
   @Column()
   email: string;
 
+  @Field()
   @Column()
   password: string;
 
@@ -38,12 +39,12 @@ class User extends BaseEntity {
   @Column({ nullable: true })
   avatar?: string;
 
-  @Field()
+  @Field({ nullable: true })
   @Column({ nullable: true })
-  inTheNight?: string;
+  onTheNight?: string;
 
-  @Field()
-  @Column('date', { default: null })
+  @Field({ nullable: true })
+  @Column('timestamp', { default: null, nullable: true })
   deleted_at?: Date;
 
   @Field()
