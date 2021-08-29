@@ -3,9 +3,6 @@ import { pathsToModuleNameMapper } from 'ts-jest/utils';
 import { compilerOptions } from './tsconfig.json';
 
 export default {
-  transform: {
-    '.+\\.ts$': 'ts-jest',
-  },
   bail: true,
   clearMocks: true,
   coverageProvider: 'v8',
