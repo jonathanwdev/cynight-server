@@ -1,5 +1,7 @@
 import CreateUserServiceFactory from '@Modules/User/factories/CreateUserServiceFactory';
-import UserRepository from '@Modules/User/Repository/typeorm/UserRepository';
+import DeleteUserServiceFactory from '@Modules/User/factories/DeleteUserServiceFactory';
+import FindAllActiveUsersServiceFactory from '@Modules/User/factories/FindAllActiveUsersServiceFactory';
+import FindOneUserServiceFactory from '@Modules/User/factories/FindOneUserServiceFactory';
 import User from '@Typeorm/entity/User';
 import { Resolver, Mutation, Query, Arg } from 'type-graphql';
 
@@ -7,11 +9,6 @@ import { CreateUserInput, FindOneUserInput } from '../Inputs/User';
 
 @Resolver()
 export class UserResolver {
-  private userRepository: UserRepository;
-  constructor() {
-    this.userRepository = new UserRepository();
-  }
-
   @Mutation(() => User)
   public async CreateUser(
     @Arg('data', () => CreateUserInput) data: CreateUserInput,
@@ -22,15 +19,15 @@ export class UserResolver {
 
   @Query(() => [User], { nullable: true })
   public async FindAllActiveUsers(): Promise<User[] | []> {
-    const users = await this.userRepository.findAllActiveUsers();
+    const users = await FindAllActiveUsersServiceFactory().run();
     return users;
   }
 
   @Query(() => User, { nullable: true })
   public async FindOneUser(
     @Arg('data', () => FindOneUserInput) data: FindOneUserInput,
-  ): Promise<User | undefined> {
-    const user = await this.userRepository.findOneUserByEmailOrID(data);
+  ): Promise<User | null> {
+    const user = await FindOneUserServiceFactory().run(data);
     return user;
   }
 
@@ -38,7 +35,7 @@ export class UserResolver {
   public async DeleteUser(
     @Arg('data', () => FindOneUserInput) data: FindOneUserInput,
   ): Promise<User | null> {
-    const user = await this.userRepository.deleteUserByEmailOrID(data);
+    const user = await DeleteUserServiceFactory().run(data);
     return user;
   }
 }
