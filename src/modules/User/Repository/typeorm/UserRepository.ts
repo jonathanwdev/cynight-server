@@ -34,6 +34,7 @@ class UserRepository implements IUserRepository {
     });
     return user;
   }
+
   public async deleteUserByEmailOrID(
     params: findUserParams,
   ): Promise<User | null> {
