@@ -33,7 +33,8 @@
       "@Typeorm/*":["typeorm/*"],
       "@Config/*":["config/*"],
       "@Utils/*":["utils/*"],
-      "@Helpers/*":["helpers/*"]
+      "@Helpers/*":["helpers/*"],
+      "@types/*":["types/*"]
     }
   },
   "exclude": [
