@@ -3,6 +3,7 @@ import User from '@Typeorm/entity/User';
 export type findUserParams = {
   id?: string;
   email?: string;
+  nick?: string;
 };
 
 export type createUserData = {
@@ -13,9 +14,22 @@ export type createUserData = {
   nick: string;
 };
 
+export type updateUserData = {
+  id: string;
+  name: string;
+  email: string;
+  nick: string;
+  password?: string;
+  passwordConfirmation?: string;
+};
+
 export interface IUserRepository {
   findAllActiveUsers: () => Promise<User[] | []>;
-  findOneUserByEmailOrID: (params: findUserParams) => Promise<User | undefined>;
+  findOneUserByEmailOrIDorNick: (
+    params: findUserParams,
+  ) => Promise<User | undefined>;
   createUser: (data: createUserData) => Promise<User>;
-  deleteUserByEmailOrID: (params: findUserParams) => Promise<User | null>;
+  deleteUserByID: (id: string) => Promise<User | undefined>;
+  reactivateUserByID: (id: string) => Promise<User | undefined>;
+  updateUser: (data: updateUserData) => Promise<User>;
 }

@@ -1,27 +1,25 @@
 import { ServerError } from '@Helpers/AppoloError';
 import User from '@Typeorm/entity/User';
 
-import {
-  IUserRepository,
-  findUserParams,
-} from '../Repository/usecases/IUserRepository';
+import { IUserRepository } from '../Repository/usecases/IUserRepository';
 
 class DeleteUserService {
   constructor(private readonly userRepository: IUserRepository) {}
 
-  public async run({ email, id }: findUserParams): Promise<User | null> {
+  public async run(id: string): Promise<User | undefined> {
     try {
-      if (!email && !id) {
-        throw new ServerError('ID or Email must be provided');
+      if (!id) {
+        throw new ServerError('ID must be provided');
       }
-      const user = await this.userRepository.deleteUserByEmailOrID({
-        email,
+      const userExist = await this.userRepository.findOneUserByEmailOrIDorNick({
         id,
       });
 
-      if (!user) {
+      if (!userExist) {
         throw new ServerError('User does not exist');
       }
+
+      const user = await this.userRepository.deleteUserByID(id);
 
       return user;
     } catch (err) {

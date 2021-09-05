@@ -5,6 +5,7 @@ import {
   createUserData,
   findUserParams,
   IUserRepository,
+  updateUserData,
 } from '../usecases/IUserRepository';
 
 class UserRepository implements IUserRepository {
@@ -18,6 +19,12 @@ class UserRepository implements IUserRepository {
     return user;
   }
 
+  public async updateUser(data: updateUserData): Promise<User> {
+    await this.ormRepository.save(data);
+    const user = await this.ormRepository.findOne(data.id);
+    return user!;
+  }
+
   public async findAllActiveUsers(): Promise<User[] | []> {
     const users = await this.ormRepository.find({
       where: { deleted_at: null },
@@ -25,29 +32,33 @@ class UserRepository implements IUserRepository {
     return users;
   }
 
-  public async findOneUserByEmailOrID(
+  public async findOneUserByEmailOrIDorNick(
     params: findUserParams,
   ): Promise<User | undefined> {
-    const { email, id } = params;
+    const { email, id, nick } = params;
     const user = await this.ormRepository.findOne({
-      where: [{ email }, { id }],
+      where: [{ email }, { id }, { nick }],
     });
     return user;
   }
 
-  public async deleteUserByEmailOrID(
-    params: findUserParams,
-  ): Promise<User | null> {
-    const user = await this.findOneUserByEmailOrID(params);
-    if (!user) {
-      return null;
-    }
-    const updatedUser = await this.ormRepository.save({
-      ...user,
+  public async deleteUserByID(id: string): Promise<User | undefined> {
+    await this.ormRepository.update(id, {
       deleted_at: new Date(),
     });
+    const user = await this.findOneUserByEmailOrIDorNick({ id });
+    return user;
+  }
 
-    return updatedUser;
+  public async reactivateUserByID(id: string): Promise<User | undefined> {
+    await this.ormRepository.update(id, {
+      deleted_at: undefined,
+    });
+    const user = await this.findOneUserByEmailOrIDorNick({
+      id,
+    });
+
+    return user;
   }
 }
 

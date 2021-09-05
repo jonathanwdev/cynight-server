@@ -1,21 +1,17 @@
 import { ServerError } from '@Helpers/AppoloError';
 import User from '@Typeorm/entity/User';
 
-import {
-  IUserRepository,
-  findUserParams,
-} from '../Repository/usecases/IUserRepository';
+import { IUserRepository } from '../Repository/usecases/IUserRepository';
 
 class FindOneUserService {
   constructor(private readonly userRepository: IUserRepository) {}
 
-  public async run({ email, id }: findUserParams): Promise<User | null> {
+  public async run(id: string): Promise<User | null> {
     try {
-      if (!email && !id) {
-        throw new ServerError('ID or Email must be provided');
+      if (!id) {
+        throw new ServerError('ID must be provided');
       }
-      const user = await this.userRepository.findOneUserByEmailOrID({
-        email,
+      const user = await this.userRepository.findOneUserByEmailOrIDorNick({
         id,
       });
 

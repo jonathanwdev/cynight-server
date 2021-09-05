@@ -33,6 +33,29 @@ export class CreateUserInput {
 }
 
 @InputType()
+export class UpdateAuthUserInput {
+  @Field()
+  @Length(1, 200)
+  name: string;
+
+  @Field()
+  @IsEmail()
+  email: string;
+
+  @Field()
+  @Length(1, 35)
+  nick: string;
+
+  @Field({ nullable: true })
+  @Length(6, 250)
+  password: string;
+
+  @Field({ nullable: true })
+  @Length(6, 250)
+  passwordConfirmation: string;
+}
+
+@InputType()
 export class FindOneUserInput {
   @Field({ nullable: true })
   id?: string;
