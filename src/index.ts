@@ -15,7 +15,7 @@ import './database/DatabaseConection';
 
   const apolloServer = new ApolloServer({
     schema,
-    context: ({ req, res }) => ({ req, res }),
+    context: ({ req }) => ({ req }),
   });
 
   apolloServer.applyMiddleware({ app, cors: false });
