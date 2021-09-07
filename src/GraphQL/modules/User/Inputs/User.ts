@@ -1,6 +1,6 @@
 import { IsEmailAlreadyExist } from '@GraphQL/validators/IsEmailAlreadyExist';
 import { IsNickAlreadyExist } from '@GraphQL/validators/IsNickAlreadyExist';
-import { Length, IsEmail, IsNotEmpty } from 'class-validator';
+import { Length, IsEmail, IsNotEmpty, ValidateIf } from 'class-validator';
 import { InputType, Field } from 'type-graphql';
 
 @InputType()
@@ -47,10 +47,20 @@ export class UpdateAuthUserInput {
   nick: string;
 
   @Field({ nullable: true })
+  @ValidateIf(prop => !!prop.password || !!prop.passwordConfirmation)
+  @IsNotEmpty()
+  @Length(6, 250)
+  lastPassword: string;
+
+  @Field({ nullable: true })
+  @ValidateIf(prop => !!prop.lastPassword)
+  @IsNotEmpty()
   @Length(6, 250)
   password: string;
 
   @Field({ nullable: true })
+  @ValidateIf(prop => !!prop.lastPassword)
+  @IsNotEmpty()
   @Length(6, 250)
   passwordConfirmation: string;
 }

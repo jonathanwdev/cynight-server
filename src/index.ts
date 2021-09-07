@@ -4,6 +4,7 @@ import express from 'express';
 import { buildSchema } from 'type-graphql';
 
 import './database/DatabaseConection';
+import { join } from 'path';
 
 (async () => {
   const app = express();
@@ -19,6 +20,8 @@ import './database/DatabaseConection';
   });
 
   apolloServer.applyMiddleware({ app, cors: false });
+
+  app.use('/images', express.static(join(__dirname, '../tmp')));
 
   const port = process.env.SERVER_PORT || 4000;
   app.listen(port, () => {
