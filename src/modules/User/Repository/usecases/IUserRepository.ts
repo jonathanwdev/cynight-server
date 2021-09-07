@@ -19,6 +19,7 @@ export type updateUserData = {
   name: string;
   email: string;
   nick: string;
+  lastPassword?: string;
   password?: string;
   passwordConfirmation?: string;
 };
@@ -31,5 +32,5 @@ export interface IUserRepository {
   createUser: (data: createUserData) => Promise<User>;
   deleteUserByID: (id: string) => Promise<User | undefined>;
   reactivateUserByID: (id: string) => Promise<User | undefined>;
-  updateUser: (data: updateUserData) => Promise<User>;
+  save: (data: User) => Promise<User>;
 }

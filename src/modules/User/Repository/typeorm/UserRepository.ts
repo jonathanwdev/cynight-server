@@ -5,7 +5,6 @@ import {
   createUserData,
   findUserParams,
   IUserRepository,
-  updateUserData,
 } from '../usecases/IUserRepository';
 
 class UserRepository implements IUserRepository {
@@ -17,12 +16,6 @@ class UserRepository implements IUserRepository {
   public async createUser(data: createUserData): Promise<User> {
     const user = await this.ormRepository.create(data).save();
     return user;
-  }
-
-  public async updateUser(data: updateUserData): Promise<User> {
-    await this.ormRepository.save(data);
-    const user = await this.ormRepository.findOne(data.id);
-    return user!;
   }
 
   public async findAllActiveUsers(): Promise<User[] | []> {
@@ -59,6 +52,12 @@ class UserRepository implements IUserRepository {
     });
 
     return user;
+  }
+
+  public async save(user: User): Promise<User> {
+    await this.ormRepository.save(user);
+    const updatedUser = await this.ormRepository.findOne(user.id);
+    return updatedUser!;
   }
 }
 
