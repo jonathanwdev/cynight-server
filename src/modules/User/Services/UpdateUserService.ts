@@ -20,6 +20,7 @@ class UpdateUserService {
     email,
     name,
     nick,
+    lastPassword,
   }: updateUserData): Promise<User> {
     try {
       const userExist = await this.userRepository.findOneUserByEmailOrIDorNick({
@@ -27,25 +28,34 @@ class UpdateUserService {
       });
 
       if (!userExist) {
-        throw new Error('User does not exist !');
+        throw new ServerError('User does not exist !');
       }
 
-      if (password !== passwordConfirmation) {
-        throw new Error('Password does not match !');
-      }
-
-      if (password) {
+      if (lastPassword) {
         const changedPassword = await this.passwordEncrypter.comparePassword({
           encryptedPassword: userExist.password,
-          password,
+          password: lastPassword,
         });
 
         if (!changedPassword) {
+          throw new ServerError('Invalid password !');
+        }
+
+        if (password !== passwordConfirmation) {
+          throw new ServerError('Password does not match !');
+        }
+
+        if (passwordConfirmation && password) {
           userExist.password = await this.passwordEncrypter.encrypt({
             password,
           });
+        } else {
+          throw new ServerError(
+            'Password and passwordConfirmation is required !',
+          );
         }
       }
+
       if (email !== userExist.email) {
         const emailExist =
           await this.userRepository.findOneUserByEmailOrIDorNick({
@@ -71,7 +81,7 @@ class UpdateUserService {
       userExist.nick = nick;
       userExist.name = name;
 
-      const updatedUser = await this.userRepository.updateUser(userExist);
+      const updatedUser = await this.userRepository.save(userExist);
 
       return updatedUser;
     } catch (err) {
