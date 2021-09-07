@@ -23,7 +23,6 @@ class User extends BaseEntity {
   @Column()
   email: string;
 
-  @Field()
   @Column()
   password: string;
 
@@ -35,11 +34,9 @@ class User extends BaseEntity {
   @Column('bool', { default: false })
   influencer: boolean;
 
-  @Field({ nullable: true })
   @Column({ nullable: true })
   avatar?: string;
 
-  @Field({ nullable: true })
   @Column({ nullable: true })
   onTheNight?: string;
 
@@ -54,6 +51,20 @@ class User extends BaseEntity {
   @Field()
   @UpdateDateColumn()
   updated_at: Date;
+
+  @Field(() => String || null, { nullable: true })
+  avatar_url(): string | null {
+    return this.avatar
+      ? `${process.env.SERVER_URL}/images/avatars/${this.avatar}`
+      : null;
+  }
+
+  @Field(() => String || null, { nullable: true })
+  onTheNight_url(): string | null {
+    return this.avatar
+      ? `${process.env.SERVER_URL}/images/onthenight/${this.onTheNight}`
+      : null;
+  }
 }
 
 export default User;
