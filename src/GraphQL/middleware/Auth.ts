@@ -1,5 +1,5 @@
 import jwtConfig from '@Config/jwtConfig';
-import { ServerError } from '@Helpers/AppoloError';
+import { ServerError, UnauthorizedError } from '@Helpers/AppoloError';
 import { Request } from 'express';
 import { verify } from 'jsonwebtoken';
 import { MiddlewareFn, ResolverData } from 'type-graphql';
@@ -18,7 +18,7 @@ export const isAuthenticated: MiddlewareFn = async (
 ) => {
   const tokenExist = context?.req?.headers?.authorization;
   if (!tokenExist) {
-    throw new ServerError('Token is missing !');
+    throw new UnauthorizedError('Token is missing !');
   }
 
   try {
