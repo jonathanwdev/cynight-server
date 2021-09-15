@@ -1,4 +1,5 @@
 import { isAuthenticated, MyContext } from '@GraphQL/middleware/Auth';
+import { isValidUser } from '@GraphQL/middleware/User';
 import { AuthenticationInput } from '@GraphQL/modules/Auth/Inputs/Auth';
 import CreateUserServiceFactory from '@Modules/User/factories/CreateUserServiceFactory';
 import DeleteUserServiceFactory from '@Modules/User/factories/DeleteUserServiceFactory';
@@ -58,7 +59,7 @@ export class UserResolver {
     return user;
   }
 
-  @UseMiddleware(isAuthenticated)
+  @UseMiddleware(isAuthenticated, isValidUser)
   @Mutation(() => User, { nullable: true })
   public async DeleteAuthenticatedUser(
     @Ctx() ctx: MyContext,
