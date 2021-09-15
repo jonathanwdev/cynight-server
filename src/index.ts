@@ -1,10 +1,10 @@
 import 'reflect-metadata';
 import { ApolloServer } from 'apollo-server-express';
 import express from 'express';
+import { join } from 'path';
 import { buildSchema } from 'type-graphql';
 
 import './database/DatabaseConection';
-import { join } from 'path';
 
 (async () => {
   const app = express();
