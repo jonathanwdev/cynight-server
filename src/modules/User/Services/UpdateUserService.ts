@@ -1,4 +1,9 @@
-import { ServerError } from '@Helpers/AppoloError';
+import {
+  MissingParamError,
+  NotFoundError,
+  ServerError,
+  UnauthorizedError,
+} from '@Helpers/AppoloError';
 import User from '@Typeorm/entity/User';
 import { IPasswordEncrypter } from '@Utils/usecases/IPasswordEncrypter';
 
@@ -28,7 +33,7 @@ class UpdateUserService {
       });
 
       if (!userExist) {
-        throw new ServerError('User does not exist !');
+        throw new NotFoundError('User does not exist !');
       }
 
       if (lastPassword) {
@@ -38,11 +43,11 @@ class UpdateUserService {
         });
 
         if (!changedPassword) {
-          throw new ServerError('Invalid password !');
+          throw new UnauthorizedError('Invalid password !');
         }
 
         if (password !== passwordConfirmation) {
-          throw new ServerError('Password does not match !');
+          throw new UnauthorizedError('Password does not match !');
         }
 
         if (passwordConfirmation && password) {
@@ -50,7 +55,7 @@ class UpdateUserService {
             password,
           });
         } else {
-          throw new ServerError(
+          throw new MissingParamError(
             'Password and passwordConfirmation is required !',
           );
         }
@@ -63,7 +68,7 @@ class UpdateUserService {
           });
 
         if (emailExist && emailExist.id !== id) {
-          throw new ServerError('Email already in use');
+          throw new UnauthorizedError('Email already in use');
         }
       }
       userExist.email = email;
@@ -75,7 +80,7 @@ class UpdateUserService {
           });
 
         if (nickExist && nickExist.id !== id) {
-          throw new ServerError('Nick already in use');
+          throw new UnauthorizedError('Nick already in use');
         }
       }
       userExist.nick = nick;

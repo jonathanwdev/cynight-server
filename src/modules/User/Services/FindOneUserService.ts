@@ -1,4 +1,4 @@
-import { ServerError } from '@Helpers/AppoloError';
+import { ServerError, NotFoundError } from '@Helpers/AppoloError';
 import User from '@Typeorm/entity/User';
 
 import { IUserRepository } from '../Repository/usecases/IUserRepository';
@@ -16,12 +16,12 @@ class FindOneUserService {
       });
 
       if (!user) {
-        throw new ServerError('User does not exist');
+        throw new NotFoundError('User does not exist');
       }
 
       return user;
     } catch (err) {
-      throw new Error(err);
+      throw new ServerError(err);
     }
   }
 }

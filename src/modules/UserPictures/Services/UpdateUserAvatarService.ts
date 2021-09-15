@@ -1,4 +1,4 @@
-import { ServerError } from '@Helpers/AppoloError';
+import { NotFoundError, ServerError } from '@Helpers/AppoloError';
 import { IUserRepository } from '@Modules/User/Repository/usecases/IUserRepository';
 import User from '@Typeorm/entity/User';
 import { IFileUploader } from '@Utils/usecases/IFileUploader';
@@ -52,7 +52,7 @@ class UpdateUserAvatarService {
           if (avatarExist) {
             await fs.promises.unlink(path);
           }
-          throw new ServerError('Wrong directory of file');
+          throw new NotFoundError('Wrong directory of file');
         }
       }
       userExist.avatar = avatarUploaded.filename;

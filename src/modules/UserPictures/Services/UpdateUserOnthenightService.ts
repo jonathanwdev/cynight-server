@@ -1,4 +1,4 @@
-import { ServerError } from '@Helpers/AppoloError';
+import { NotFoundError, ServerError } from '@Helpers/AppoloError';
 import { IUserRepository } from '@Modules/User/Repository/usecases/IUserRepository';
 import User from '@Typeorm/entity/User';
 import { IFileUploader } from '@Utils/usecases/IFileUploader';
@@ -22,7 +22,7 @@ class UpdateUserOnthenightService {
       });
 
       if (!userExist) {
-        throw new ServerError('User does not exist !');
+        throw new NotFoundError('User does not exist !');
       }
       const generatedBytes = this.randonBytesGenerator.generateRandonBytes();
 
@@ -52,7 +52,7 @@ class UpdateUserOnthenightService {
           if (avatarExist) {
             await fs.promises.unlink(path);
           }
-          throw new ServerError('Wrong directory of file');
+          throw new NotFoundError('Wrong directory of file');
         }
       }
       userExist.onTheNight = avatarUploaded.filename;

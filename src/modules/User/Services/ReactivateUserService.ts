@@ -1,4 +1,9 @@
-import { ServerError } from '@Helpers/AppoloError';
+import {
+  MissingParamError,
+  NotFoundError,
+  ServerError,
+  UnauthorizedError,
+} from '@Helpers/AppoloError';
 import { authenticaionData } from '@Modules/Auth/Services/AuthenticationService';
 import User from '@Typeorm/entity/User';
 import { IPasswordEncrypter } from '@Utils/usecases/IPasswordEncrypter';
@@ -17,14 +22,14 @@ class ReactivateUserService {
   }: authenticaionData): Promise<User | undefined> {
     try {
       if (!email || !password) {
-        throw new ServerError('Email and password must be provided');
+        throw new MissingParamError('Email and password must be provided');
       }
       const userExist = await this.userRepository.findOneUserByEmailOrIDorNick({
         email,
       });
 
       if (!userExist) {
-        throw new ServerError('Invalid Email or Password');
+        throw new NotFoundError('Invalid Email or Password');
       }
 
       const compare = await this.passwordEncrypter.comparePassword({
@@ -33,14 +38,14 @@ class ReactivateUserService {
       });
 
       if (!compare) {
-        throw new ServerError('Invalid Email or Password');
+        throw new UnauthorizedError('Invalid Email or Password');
       }
 
       const user = await this.userRepository.reactivateUserByID(userExist.id);
 
       return user;
     } catch (err) {
-      throw new Error(err);
+      throw new ServerError(err);
     }
   }
 }

@@ -1,3 +1,4 @@
+import { ServerError, UnauthorizedError } from '@Helpers/AppoloError';
 import User from '@Typeorm/entity/User';
 import { IPasswordEncrypter } from '@Utils/usecases/IPasswordEncrypter';
 
@@ -19,7 +20,7 @@ class CreateUserService {
   }: createUserData): Promise<User> {
     try {
       if (password !== passwordConfirmation) {
-        throw new Error('Password does not match');
+        throw new UnauthorizedError('Password does not match');
       }
       const encryptedPass = await this.passwordEncrypter.encrypt({
         password,
@@ -32,7 +33,7 @@ class CreateUserService {
       });
       return user;
     } catch (err) {
-      throw new Error(err);
+      throw new ServerError(err);
     }
   }
 }

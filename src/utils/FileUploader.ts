@@ -1,5 +1,5 @@
 /* eslint-disable prefer-promise-reject-errors */
-import { ServerError } from '@Helpers/AppoloError';
+import { ServerError, UnauthorizedError } from '@Helpers/AppoloError';
 import { createWriteStream } from 'fs';
 import { join } from 'path';
 
@@ -19,7 +19,7 @@ export class FileUploader implements IFileUploader {
     const { createReadStream, filename, mimetype } = file;
     if (acceptedExt !== 'image/*') {
       if (mimetype !== acceptedExt) {
-        throw new ServerError('Wrong file format');
+        throw new UnauthorizedError('Wrong file format');
       }
     }
 

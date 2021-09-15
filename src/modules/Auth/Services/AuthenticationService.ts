@@ -1,5 +1,9 @@
 import config from '@Config/jwtConfig';
-import { ServerError } from '@Helpers/AppoloError';
+import {
+  ServerError,
+  MissingParamError,
+  UnauthorizedError,
+} from '@Helpers/AppoloError';
 import { IPasswordEncrypter } from '@Utils/usecases/IPasswordEncrypter';
 
 import { ITokenGenerator } from '../helpers/usecases/ITokenGenerator';
@@ -37,16 +41,16 @@ class AuthenticationService {
   }: authenticaionData): Promise<authenticationResponse> {
     try {
       if (!email || !password) {
-        throw new ServerError('Email and password is required !');
+        throw new MissingParamError('Email and password is required !');
       }
       const userExist = await this.authRepository.findAuthorizedUser(email);
 
       if (!userExist) {
-        throw new ServerError('Invalid Email or Password !');
+        throw new UnauthorizedError('User does not exist !');
       }
 
       if (userExist.deleted_at) {
-        throw new ServerError('Inactive user !');
+        throw new UnauthorizedError('Inactive user !');
       }
 
       const passwordMatcher = await this.passwordEncrypter.comparePassword({
@@ -55,7 +59,7 @@ class AuthenticationService {
       });
 
       if (!passwordMatcher) {
-        throw new ServerError('Invalid Email or Password !');
+        throw new UnauthorizedError('Invalid Email or Password !');
       }
 
       const token = this.tokenGenerator.generate({

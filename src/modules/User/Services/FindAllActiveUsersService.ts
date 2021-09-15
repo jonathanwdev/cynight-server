@@ -1,3 +1,4 @@
+import { ServerError } from '@Helpers/AppoloError';
 import User from '@Typeorm/entity/User';
 
 import { IUserRepository } from '../Repository/usecases/IUserRepository';
@@ -10,7 +11,7 @@ class CreateUserService {
       const users = await this.userRepository.findAllActiveUsers();
       return users;
     } catch (err) {
-      throw new Error(err);
+      throw new ServerError(err);
     }
   }
 }
