@@ -8,12 +8,13 @@ import { IUserRepository } from '@Modules/User/Repository/usecases/IUserReposito
 
 import { IFriendRequestRepository } from '../Repository/usecases/IFriendRequestRepository';
 
-export type AcceptFriendRequestParams = {
+export type InteractWithFriendRequestParams = {
   friendRequestId: string;
   userId: string;
+  status: 'accepted' | 'rejected';
 };
 
-class AcceptFriendRequestService {
+class InteractWithFriendRequestService {
   constructor(
     private readonly friendRequestRepository: IFriendRequestRepository,
     private readonly friendRepository: IFriendRepository,
@@ -23,7 +24,8 @@ class AcceptFriendRequestService {
   public async run({
     friendRequestId,
     userId,
-  }: AcceptFriendRequestParams): Promise<boolean> {
+    status,
+  }: InteractWithFriendRequestParams): Promise<boolean> {
     try {
       const friendRequest =
         await this.friendRequestRepository.findOneAwaitingFriendRequestByID(
@@ -55,6 +57,13 @@ class AcceptFriendRequestService {
         );
       }
 
+      if (status === 'rejected') {
+        await this.friendRequestRepository.deleteFriendRequestById(
+          friendRequest.id,
+        );
+        return true;
+      }
+
       friendRequest.status = 'accepted';
       await this.friendRequestRepository.save(friendRequest);
       await this.friendRepository.addFriend({
@@ -69,4 +78,4 @@ class AcceptFriendRequestService {
   }
 }
 
-export default AcceptFriendRequestService;
+export default InteractWithFriendRequestService;

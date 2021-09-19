@@ -1,7 +1,7 @@
 import { isAuthenticated, MyContext } from '@GraphQL/middleware/Auth';
 import { isValidUser } from '@GraphQL/middleware/User';
-import AcceptFriendRequestFactory from '@Modules/FriendRequest/factories/AcceptFriendRequestServiceFactory';
 import FindFriendRequestsServiceFactory from '@Modules/FriendRequest/factories/FindFriendRequestsServiceFactory';
+import InteractWithFriendRequestServiceFactory from '@Modules/FriendRequest/factories/InteractWithFriendRequestServiceFactory';
 import SendFriendRequestServiceFactory from '@Modules/FriendRequest/factories/SendFriendRequestServiceFactory';
 import { FindFriendRequestsResponseType } from '@Modules/FriendRequest/Services/FindFriendRequestsService';
 import FriendRequest from '@Typeorm/schemas/FriendRequest';
@@ -18,6 +18,7 @@ import {
   SendFriendRequestInput,
   FindFriendRequestInput,
   FindFriendRequestResponse,
+  InteractWithFriendRequestInput,
 } from '../Inputs/FriendRequest';
 
 @Resolver()
@@ -54,14 +55,16 @@ export class FriendRequestResolver {
 
   @UseMiddleware(isAuthenticated, isValidUser)
   @Mutation(() => Boolean)
-  public async AcceptFriendRequest(
-    @Arg('requestId', () => String) requestId: string,
+  public async InteractWithFriendRequest(
+    @Arg('data', () => InteractWithFriendRequestInput)
+    { requestId, status }: InteractWithFriendRequestInput,
     @Ctx() ctx: MyContext,
   ): Promise<boolean> {
     const { userId } = ctx.req!;
-    const requests = await AcceptFriendRequestFactory().run({
+    const requests = await InteractWithFriendRequestServiceFactory().run({
       friendRequestId: requestId,
       userId,
+      status,
     });
     return requests;
   }

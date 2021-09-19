@@ -1,5 +1,5 @@
 import FriendRequest from '@Typeorm/schemas/FriendRequest';
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsEnum } from 'class-validator';
 import { InputType, Field, Int, ObjectType } from 'type-graphql';
 
 @InputType()
@@ -22,4 +22,19 @@ export class FindFriendRequestResponse {
 
   @Field()
   count: number;
+}
+
+enum Status {
+  accepted = 1,
+  rejected = 2,
+}
+
+@InputType()
+export class InteractWithFriendRequestInput {
+  @Field()
+  requestId: string;
+
+  @Field(() => String)
+  @IsEnum(Status)
+  status: 'accepted' | 'rejected';
 }

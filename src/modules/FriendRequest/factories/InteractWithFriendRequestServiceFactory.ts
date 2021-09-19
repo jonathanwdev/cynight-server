@@ -2,16 +2,16 @@ import FriendRepository from '@Modules/FriendShip/Repository/typeorm/FriendRepos
 import UserRepository from '@Modules/User/Repository/typeorm/UserRepository';
 
 import FriendRequestRepository from '../Repository/typeorm/FriendRequestRepository';
-import AcceptFriendRequest from '../Services/AcceptFriendRequest';
+import InteractWithFriendRequestService from '../Services/InteractWithFriendRequestService';
 
-export default function AcceptFriendRequestFactory(): AcceptFriendRequest {
+export default function InteractWithFriendRequestFactory(): InteractWithFriendRequestService {
   const friendRequestRepository = new FriendRequestRepository();
   const friendRepository = new FriendRepository();
   const userRepository = new UserRepository();
-  const acceptFriendRequestService = new AcceptFriendRequest(
+  const interactWithFriendRequestService = new InteractWithFriendRequestService(
     friendRequestRepository,
     friendRepository,
     userRepository,
   );
-  return acceptFriendRequestService;
+  return interactWithFriendRequestService;
 }
