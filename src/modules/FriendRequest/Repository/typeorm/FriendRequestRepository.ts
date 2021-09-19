@@ -1,6 +1,6 @@
 import FriendRequest from '@Typeorm/schemas/FriendRequest';
 import { request } from 'express';
-import { getMongoRepository, MongoRepository } from 'typeorm';
+import { getMongoRepository, MongoRepository, ObjectID } from 'typeorm';
 
 import {
   IFriendRequestRepository,
@@ -29,9 +29,12 @@ class FriendRequestRepository implements IFriendRequestRepository {
     return friendRequest;
   }
 
-  public async save(friendRequest: FriendRequest): Promise<null> {
+  public async save(friendRequest: FriendRequest): Promise<void> {
     await this.ormRepository.save(friendRequest);
-    return null;
+  }
+
+  public async deleteFriendRequestById(id: ObjectID): Promise<void> {
+    await this.ormRepository.delete(id);
   }
 
   public async findAllAwaitingFriendRequests({

@@ -33,7 +33,7 @@ class FriendRequest {
     defaultValue: 'awaiting',
   })
   @Column({ type: 'string', default: 'awaiting' })
-  status: 'awaiting' | 'accepted' | 'rejected';
+  status: 'awaiting' | 'accepted';
 
   @Field()
   @CreateDateColumn()

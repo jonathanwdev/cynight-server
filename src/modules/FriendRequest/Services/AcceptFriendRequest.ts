@@ -41,13 +41,15 @@ class AcceptFriendRequestService {
         throw new UnauthorizedError('You can only accept awaiting requests');
       }
 
-      const userExist = await this.userRepository.findOneUserByEmailOrIDorNick({
-        id: friendRequest.user_requested,
-      });
+      const userRequesterExist =
+        await this.userRepository.findOneUserByEmailOrIDorNick({
+          id: friendRequest.user_requester,
+        });
 
-      if (!userExist || userExist.deleted_at) {
-        friendRequest.status = 'rejected';
-        await this.friendRequestRepository.save(friendRequest);
+      if (!userRequesterExist || userRequesterExist.deleted_at) {
+        await this.friendRequestRepository.deleteFriendRequestById(
+          friendRequest.id,
+        );
         throw new UnauthorizedError(
           'You can not accept requests from deleted users',
         );

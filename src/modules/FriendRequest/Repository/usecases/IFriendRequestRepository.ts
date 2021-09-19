@@ -1,4 +1,5 @@
 import FriendRequest from '@Typeorm/schemas/FriendRequest';
+import { ObjectID } from 'typeorm';
 
 export type sendFriendRequestData = {
   userRequester: string;
@@ -20,7 +21,7 @@ export type reactFriendRequestParams = 'accepted' | 'rejected';
 
 export interface IFriendRequestRepository {
   create: (data: sendFriendRequestData) => Promise<FriendRequest>;
-  save: (friendRequest: FriendRequest) => Promise<null>;
+  save: (friendRequest: FriendRequest) => Promise<void>;
   findAllAwaitingFriendRequests: (
     data: findFriendRequestParams,
   ) => Promise<[FriendRequest[], number]>;
@@ -30,4 +31,5 @@ export interface IFriendRequestRepository {
   findOneAwaitingFriendRequestByID: (
     requestId: string,
   ) => Promise<FriendRequest | undefined>;
+  deleteFriendRequestById: (id: ObjectID) => Promise<void>;
 }
