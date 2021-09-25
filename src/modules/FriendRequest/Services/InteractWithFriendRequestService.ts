@@ -64,12 +64,15 @@ class InteractWithFriendRequestService {
         return true;
       }
 
-      friendRequest.status = 'accepted';
-      await this.friendRequestRepository.save(friendRequest);
-      await this.friendRepository.addFriend({
-        friendId: friendRequest.user_requested,
-        userId: friendRequest.user_requester,
-      });
+      await Promise.all([
+        await this.friendRepository.addFriend({
+          friendId: friendRequest.user_requested,
+          userId: friendRequest.user_requester,
+        }),
+        await this.friendRequestRepository.deleteFriendRequestById(
+          friendRequest.id,
+        ),
+      ]);
 
       return true;
     } catch (err) {

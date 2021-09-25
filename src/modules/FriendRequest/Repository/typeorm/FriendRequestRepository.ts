@@ -1,5 +1,4 @@
 import FriendRequest from '@Typeorm/schemas/FriendRequest';
-import { request } from 'express';
 import { getMongoRepository, MongoRepository, ObjectID } from 'typeorm';
 
 import {

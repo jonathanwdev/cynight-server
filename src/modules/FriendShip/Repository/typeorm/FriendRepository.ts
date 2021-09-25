@@ -12,6 +12,10 @@ class FriendRepository implements IFriendRepository {
     this.ormRepository = getRepository(Friends);
   }
 
+  public async save(friend: Friends): Promise<void> {
+    await this.ormRepository.save(friend);
+  }
+
   public async addFriend({
     friendId,
     userId,
@@ -40,16 +44,44 @@ class FriendRepository implements IFriendRepository {
   }: addFriendData): Promise<Friends | undefined> {
     const friend = await this.ormRepository.findOne({
       where: { user_id: userId, friend_id: friendId },
+      relations: ['friend'],
     });
     return friend;
   }
 
   public async findAllFriends(userId: string): Promise<Friends[] | undefined> {
     const friends = await this.ormRepository.find({
-      where: { user_id: userId },
+      where: { user_id: userId, isBlocked: false },
       relations: ['friend'],
     });
     return friends;
+  }
+
+  public async findFriendShip({
+    userId,
+    friendId,
+  }: addFriendData): Promise<Friends[] | undefined> {
+    const friends = await this.ormRepository.find({
+      where: [
+        { user_id: userId, friend_id: friendId },
+        { user_id: friendId, friend_id: userId },
+      ],
+    });
+    return friends;
+  }
+
+  public async findAllBlockedFriends(
+    userId: string,
+  ): Promise<Friends[] | undefined> {
+    const friends = await this.ormRepository.find({
+      where: { user_id: userId, isBlocked: true },
+      relations: ['friend'],
+    });
+    return friends;
+  }
+
+  public async deleteFriendShip(friendShip: Friends[]): Promise<void> {
+    await this.ormRepository.remove(friendShip);
   }
 }
 
