@@ -48,6 +48,12 @@ export class CreateUsers1630022313905 implements MigrationInterface {
             isNullable: true,
           },
           {
+            name: 'isActive',
+            type: 'boolean',
+            isNullable: false,
+            default: false,
+          },
+          {
             name: 'deleted_at',
             type: 'timestamp',
             isNullable: true,

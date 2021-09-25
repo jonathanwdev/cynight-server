@@ -29,6 +29,12 @@ export class UserFriendList1631031639504 implements MigrationInterface {
             isNullable: false,
           },
           {
+            name: 'isBlocked',
+            type: 'boolean',
+            isNullable: false,
+            default: false,
+          },
+          {
             name: 'created_at',
             type: 'timestamp',
             default: 'now()',
