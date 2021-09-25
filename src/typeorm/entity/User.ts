@@ -34,6 +34,10 @@ class User extends BaseEntity {
   @Column('bool', { default: false })
   influencer: boolean;
 
+  @Field({ defaultValue: false })
+  @Column('bool', { default: false })
+  isActive: boolean;
+
   @Column({ nullable: true })
   avatar?: string;
 

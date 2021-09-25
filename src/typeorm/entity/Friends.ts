@@ -31,6 +31,10 @@ class Friends extends BaseEntity {
   @JoinColumn({ name: 'friend_id' })
   friend: User;
 
+  @Field({ defaultValue: false })
+  @Column('bool', { default: false })
+  isBlocked: boolean;
+
   @Field()
   @CreateDateColumn()
   created_at: Date;
